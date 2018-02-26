@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMapiConsoleApp", "ExampleMapiConsoleApp.vcxproj", "{8B361B08-2BF7-42A7-93BE-81524BBB98DC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapiStubLibrary", "..\MapiStubLibrary\MapiStubLibrary.vcxproj", "{771A5FAD-88F8-44F9-B454-7BAEE548E10D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Debug|Win32.Build.0 = Debug|Win32
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Debug|x64.ActiveCfg = Debug|x64
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Debug|x64.Build.0 = Debug|x64
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Release|Win32.ActiveCfg = Release|Win32
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Release|Win32.Build.0 = Release|Win32
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Release|x64.ActiveCfg = Release|x64
+		{8B361B08-2BF7-42A7-93BE-81524BBB98DC}.Release|x64.Build.0 = Release|x64
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Debug|Win32.Build.0 = Debug|Win32
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Debug|x64.ActiveCfg = Debug|x64
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Debug|x64.Build.0 = Debug|x64
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Release|Win32.ActiveCfg = Release|Win32
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Release|Win32.Build.0 = Release|Win32
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Release|x64.ActiveCfg = Release|x64
+		{771A5FAD-88F8-44F9-B454-7BAEE548E10D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
