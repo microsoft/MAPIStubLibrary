@@ -1,9 +1,8 @@
-#include <windows.h>
+#include <Windows.h>
 #include <strsafe.h>
-#include <msi.h>
+#include <Msi.h>
 #include <winreg.h>
 #include <stdlib.h>
-
 
 /*
  *  MAPI Stub Utilities
@@ -28,7 +27,6 @@
 HMODULE GetPrivateMAPI();
 void UnLoadPrivateMAPI();
 void ForceOutlookMAPI();
-
 
 const WCHAR WszKeyNameMailClient[] = L"Software\\Clients\\Mail";
 const WCHAR WszValueNameDllPathEx[] = L"DllPathEx";
@@ -56,27 +54,25 @@ volatile ULONG g_ulDllSequenceNum = 1;
 //  Outlook and its MAPI DLLs
 static bool s_fForceOutlookMAPI = false;
 
-static volatile HMODULE		g_hinstMAPI = nullptr;
+static volatile HMODULE g_hinstMAPI = nullptr;
 
-__inline HMODULE GetMAPIHandle()
-{
-	return g_hinstMAPI;
-}
+HMODULE GetMAPIHandle() { return g_hinstMAPI; }
 
 void SetMAPIHandle(HMODULE hinstMAPI)
 {
-	HMODULE	hinstNULL = nullptr;
-	HMODULE	hinstToFree = nullptr;
+	HMODULE hinstNULL = nullptr;
+	HMODULE hinstToFree = nullptr;
 
 	if (hinstMAPI == nullptr)
 	{
-		hinstToFree = (HMODULE)InterlockedExchangePointer((PVOID*)&g_hinstMAPI, hinstNULL);
+		hinstToFree = (HMODULE) InterlockedExchangePointer((PVOID*) &g_hinstMAPI, hinstNULL);
 	}
 	else
 	{
 		// Set the value only if the global is nullptr
-		HMODULE	hinstPrev;
-		hinstPrev = (HMODULE)InterlockedCompareExchangePointer(reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
+		HMODULE hinstPrev;
+		hinstPrev = (HMODULE) InterlockedCompareExchangePointer(
+			reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
 		if (nullptr != hinstPrev)
 		{
 			hinstToFree = hinstMAPI;
@@ -104,7 +100,7 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
 	WCHAR rgchValue[MAX_PATH];
 	DWORD dwSize = sizeof(rgchValue);
 
-	dwErr = RegQueryValueExW(hKey, lpValueName, 0, &dwType, (LPBYTE)&rgchValue, &dwSize);
+	dwErr = RegQueryValueExW(hKey, lpValueName, 0, &dwType, (LPBYTE) &rgchValue, &dwSize);
 
 	if (dwErr == ERROR_SUCCESS)
 	{
@@ -138,15 +134,14 @@ BOOL GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DW
 	HMODULE hMapiStub = nullptr;
 	BOOL fReturn = FALSE;
 
-	typedef BOOL(STDAPICALLTYPE *FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, BOOL);
+	typedef BOOL(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, BOOL);
 
 	hMapiStub = LoadLibraryW(WszMapi32);
-	if (!hMapiStub)
-		hMapiStub = LoadLibraryW(WszMapiStub);
+	if (!hMapiStub) hMapiStub = LoadLibraryW(WszMapiStub);
 
 	if (hMapiStub)
 	{
-		FGetComponentPathType pFGetCompPath = (FGetComponentPathType)GetProcAddress(hMapiStub, SzFGetComponentPath);
+		FGetComponentPathType pFGetCompPath = (FGetComponentPathType) GetProcAddress(hMapiStub, SzFGetComponentPath);
 
 		fReturn = pFGetCompPath(szComponent, szQualifier, szDllPath, cchBufferSize, fInstall);
 
@@ -156,29 +151,30 @@ BOOL GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DW
 	return fReturn;
 }
 
-
 /*
  *  LoadMailClientFromMSIData
  *		Attempt to locate the MAPI provider DLL via HKLM\Software\Clients\Mail\(provider)\MSIComponentID
  */
 HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
 {
-	HMODULE		hinstMapi = nullptr;
-	CHAR		rgchMSIComponentID[MAX_PATH];
-	CHAR		rgchMSIApplicationLCID[MAX_PATH];
-	CHAR		rgchComponentPath[MAX_PATH];
-	DWORD		dwType = 0;
+	HMODULE hinstMapi = nullptr;
+	CHAR rgchMSIComponentID[MAX_PATH];
+	CHAR rgchMSIApplicationLCID[MAX_PATH];
+	CHAR rgchComponentPath[MAX_PATH];
+	DWORD dwType = 0;
 
 	DWORD dwSizeComponentID = sizeof(rgchMSIComponentID);
 	DWORD dwSizeLCID = sizeof(rgchMSIApplicationLCID);
 
-	if (ERROR_SUCCESS == RegQueryValueExA(hkeyMapiClient, SzValueNameMSI, 0,
-		&dwType, (LPBYTE)&rgchMSIComponentID, &dwSizeComponentID)
-		&& ERROR_SUCCESS == RegQueryValueExA(hkeyMapiClient, SzValueNameLCID, 0,
-			&dwType, (LPBYTE)&rgchMSIApplicationLCID, &dwSizeLCID))
+	if (ERROR_SUCCESS ==
+			RegQueryValueExA(
+				hkeyMapiClient, SzValueNameMSI, 0, &dwType, (LPBYTE) &rgchMSIComponentID, &dwSizeComponentID) &&
+		ERROR_SUCCESS ==
+			RegQueryValueExA(
+				hkeyMapiClient, SzValueNameLCID, 0, &dwType, (LPBYTE) &rgchMSIApplicationLCID, &dwSizeLCID))
 	{
-		if (GetComponentPath(rgchMSIComponentID, rgchMSIApplicationLCID,
-			rgchComponentPath, _countof(rgchComponentPath), FALSE))
+		if (GetComponentPath(
+				rgchMSIComponentID, rgchMSIApplicationLCID, rgchComponentPath, _countof(rgchComponentPath), FALSE))
 		{
 			hinstMapi = LoadLibraryA(rgchComponentPath);
 		}
@@ -192,8 +188,8 @@ HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
  */
 HMODULE LoadMailClientFromDllPath(HKEY hkeyMapiClient)
 {
-	HMODULE		hinstMapi = nullptr;
-	WCHAR		rgchDllPath[MAX_PATH];
+	HMODULE hinstMapi = nullptr;
+	WCHAR rgchDllPath[MAX_PATH];
 
 	DWORD dwSizeDllPath = _countof(rgchDllPath);
 
@@ -222,50 +218,37 @@ HMODULE LoadMailClientFromDllPath(HKEY hkeyMapiClient)
  */
 HMODULE LoadRegisteredMapiClient(LPCWSTR pwzProviderOverride)
 {
-	HMODULE		hinstMapi = nullptr;
-	DWORD		dwType;
-	HKEY 		hkey = nullptr, hkeyMapiClient = nullptr;
-	WCHAR		rgchMailClient[MAX_PATH];
-	LPCWSTR		pwzProvider = pwzProviderOverride;
+	HMODULE hinstMapi = nullptr;
+	DWORD dwType;
+	HKEY hkey = nullptr, hkeyMapiClient = nullptr;
+	WCHAR rgchMailClient[MAX_PATH];
+	LPCWSTR pwzProvider = pwzProviderOverride;
 
 	// Open HKLM\Software\Clients\Mail
-	if (ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-		WszKeyNameMailClient,
-		0,
-		KEY_READ,
-		&hkey))
+	if (ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE, WszKeyNameMailClient, 0, KEY_READ, &hkey))
 	{
 		// If a specific provider wasn't specified, load the name of the default MAPI provider
 		if (!pwzProvider)
 		{
 			// Get Outlook application path registry value
 			DWORD dwSize = sizeof(rgchMailClient);
-			if SUCCEEDED(RegQueryValueExW(hkey,
-				nullptr,
-				0,
-				&dwType,
-				(LPBYTE)&rgchMailClient,
-				&dwSize))
+			if
+				SUCCEEDED(RegQueryValueExW(hkey, nullptr, 0, &dwType, (LPBYTE) &rgchMailClient, &dwSize))
 
-				if (dwType != REG_SZ)
-					goto Error;
+			if (dwType != REG_SZ) goto Error;
 
 			pwzProvider = rgchMailClient;
 		}
 
 		if (pwzProvider)
 		{
-			if SUCCEEDED(RegOpenKeyExW(hkey,
-				pwzProvider,
-				0,
-				KEY_READ,
-				&hkeyMapiClient))
-			{
-				hinstMapi = LoadMailClientFromMSIData(hkeyMapiClient);
+			if
+				SUCCEEDED(RegOpenKeyExW(hkey, pwzProvider, 0, KEY_READ, &hkeyMapiClient))
+				{
+					hinstMapi = LoadMailClientFromMSIData(hkeyMapiClient);
 
-				if (!hinstMapi)
-					hinstMapi = LoadMailClientFromDllPath(hkeyMapiClient);
-			}
+					if (!hinstMapi) hinstMapi = LoadMailClientFromDllPath(hkeyMapiClient);
+				}
 		}
 	}
 
@@ -279,11 +262,11 @@ Error:
  */
 HMODULE LoadMAPIFromSystemDir()
 {
-	WCHAR szSystemDir[MAX_PATH] = { 0 };
+	WCHAR szSystemDir[MAX_PATH] = {0};
 
 	if (GetSystemDirectoryW(szSystemDir, MAX_PATH))
 	{
-		WCHAR szDLLPath[MAX_PATH] = { 0 };
+		WCHAR szDLLPath[MAX_PATH] = {0};
 		swprintf_s(szDLLPath, _countof(szDLLPath), WszMAPISystemPath, szSystemDir, WszMapi32);
 		return LoadLibraryW(szDLLPath);
 	}
@@ -293,7 +276,7 @@ HMODULE LoadMAPIFromSystemDir()
 
 HMODULE GetDefaultMapiHandle()
 {
-	HMODULE	hinstMapi = nullptr;
+	HMODULE hinstMapi = nullptr;
 
 	// Try to respect the machine's default MAPI client settings.  If the active MAPI provider
 	//  is Outlook, don't load and instead run the logic below
@@ -311,18 +294,16 @@ HMODULE GetDefaultMapiHandle()
 	return hinstMapi;
 }
 
-
 /*------------------------------------------------------------------------------
 	Attach to wzMapiDll(olmapi32.dll/msmapi32.dll) if it is already loaded in the
 	current process.
 ------------------------------------------------------------------------------*/
-HMODULE AttachToMAPIDll(const WCHAR *wzMapiDll)
+HMODULE AttachToMAPIDll(const WCHAR* wzMapiDll)
 {
-	HMODULE	hinstPrivateMAPI = nullptr;
+	HMODULE hinstPrivateMAPI = nullptr;
 	GetModuleHandleExW(0UL, wzMapiDll, &hinstPrivateMAPI);
 	return hinstPrivateMAPI;
 }
-
 
 void UnLoadPrivateMAPI()
 {
@@ -335,11 +316,7 @@ void UnLoadPrivateMAPI()
 	}
 }
 
-void ForceOutlookMAPI(bool fForce)
-{
-	s_fForceOutlookMAPI = fForce;
-}
-
+void ForceOutlookMAPI(bool fForce) { s_fForceOutlookMAPI = fForce; }
 
 HMODULE GetPrivateMAPI()
 {
