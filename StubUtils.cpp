@@ -129,7 +129,7 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
  */
 bool GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, bool fInstall)
 {
-	bool fReturn = FALSE;
+	bool fReturn = false;
 
 	typedef bool(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, bool);
 
@@ -172,7 +172,7 @@ HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
 				hkeyMapiClient, SzValueNameLCID, 0, &dwType, (LPBYTE) &rgchMSIApplicationLCID, &dwSizeLCID))
 	{
 		if (GetComponentPath(
-				rgchMSIComponentID, rgchMSIApplicationLCID, rgchComponentPath, _countof(rgchComponentPath), FALSE))
+				rgchMSIComponentID, rgchMSIApplicationLCID, rgchComponentPath, _countof(rgchComponentPath), false))
 		{
 			hinstMapi = LoadLibraryA(rgchComponentPath);
 		}
