@@ -127,11 +127,11 @@ Exit:
  *		a DLL location from the default MAPI client registration values
  *
  */
-BOOL GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, BOOL fInstall)
+bool GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, bool fInstall)
 {
-	BOOL fReturn = FALSE;
+	bool fReturn = FALSE;
 
-	typedef BOOL(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, BOOL);
+	typedef bool(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, bool);
 
 	HMODULE hMapiStub = LoadLibraryW(WszMapi32);
 	if (!hMapiStub) hMapiStub = LoadLibraryW(WszMapiStub);
