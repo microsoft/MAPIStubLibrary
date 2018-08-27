@@ -189,6 +189,24 @@ HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
 }
 
 /*
+ *  LoadMAPIFromSystemDir
+ *		Fall back for loading System32\Mapi32.dll if all else fails
+ */
+HMODULE LoadMAPIFromSystemDir()
+{
+	WCHAR szSystemDir[MAX_PATH] = {0};
+
+	if (GetSystemDirectoryW(szSystemDir, MAX_PATH))
+	{
+		WCHAR szDLLPath[MAX_PATH] = {0};
+		swprintf_s(szDLLPath, _countof(szDLLPath), WszMAPISystemPath, szSystemDir, WszMapi32);
+		return LoadLibraryW(szDLLPath);
+	}
+
+	return nullptr;
+}
+
+/*
  *  LoadMailClientFromDllPath
  *		Attempt to locate the MAPI provider DLL via HKLM\Software\Clients\Mail\(provider)\DllPathEx
  */
@@ -260,24 +278,6 @@ HMODULE LoadRegisteredMapiClient(LPCWSTR pwzProviderOverride)
 
 Error:
 	return hinstMapi;
-}
-
-/*
- *  LoadMAPIFromSystemDir
- *		Fall back for loading System32\Mapi32.dll if all else fails
- */
-HMODULE LoadMAPIFromSystemDir()
-{
-	WCHAR szSystemDir[MAX_PATH] = {0};
-
-	if (GetSystemDirectoryW(szSystemDir, MAX_PATH))
-	{
-		WCHAR szDLLPath[MAX_PATH] = {0};
-		swprintf_s(szDLLPath, _countof(szDLLPath), WszMAPISystemPath, szSystemDir, WszMapi32);
-		return LoadLibraryW(szDLLPath);
-	}
-
-	return nullptr;
 }
 
 HMODULE GetDefaultMapiHandle()
