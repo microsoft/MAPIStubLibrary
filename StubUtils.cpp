@@ -13,7 +13,7 @@
  *			Obtain a handle to the MAPI DLL.  This function will load the MAPI DLL
  *			if it hasn't already been loaded
  *
- *		UnLoadPrivateMAPI()
+ *		UnloadPrivateMAPI()
  *			Forces the MAPI DLL to be unloaded.  This can cause problems if the code
  *			still has outstanding allocated MAPI memory, or unmatched calls to
  *			MAPIInitialize/MAPIUninitialize
@@ -25,7 +25,7 @@
  *			function calls.
  */
 HMODULE GetPrivateMAPI();
-void UnLoadPrivateMAPI();
+void UnloadPrivateMAPI();
 void ForceOutlookMAPI();
 
 const WCHAR WszKeyNameMailClient[] = L"Software\\Clients\\Mail";
@@ -60,7 +60,7 @@ HMODULE GetMAPIHandle() { return g_hinstMAPI; }
 
 void SetMAPIHandle(HMODULE hinstMAPI)
 {
-	HMODULE hinstNULL = nullptr;
+	const HMODULE hinstNULL = nullptr;
 	HMODULE hinstToFree = nullptr;
 
 	if (hinstMAPI == nullptr)
@@ -70,9 +70,8 @@ void SetMAPIHandle(HMODULE hinstMAPI)
 	else
 	{
 		// Set the value only if the global is nullptr
-		HMODULE hinstPrev;
-		hinstPrev = (HMODULE) InterlockedCompareExchangePointer(
-			reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
+		const HMODULE hinstPrev = static_cast<HMODULE>(InterlockedExchangePointer(
+			const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstMAPI)));
 		if (nullptr != hinstPrev)
 		{
 			hinstToFree = hinstMAPI;
@@ -94,13 +93,12 @@ void SetMAPIHandle(HMODULE hinstMAPI)
  */
 DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cchValueLen)
 {
-	DWORD dwErr = ERROR_SUCCESS;
 	DWORD dwType = 0;
 
-	WCHAR rgchValue[MAX_PATH];
-	DWORD dwSize = sizeof(rgchValue);
+	WCHAR rgchValue[MAX_PATH] = {0};
+	DWORD dwSize = sizeof rgchValue;
 
-	dwErr = RegQueryValueExW(hKey, lpValueName, 0, &dwType, (LPBYTE) &rgchValue, &dwSize);
+	DWORD dwErr = RegQueryValueExW(hKey, lpValueName, nullptr, &dwType, reinterpret_cast<LPBYTE>(&rgchValue), &dwSize);
 
 	if (dwErr == ERROR_SUCCESS)
 	{
@@ -131,17 +129,17 @@ Exit:
  */
 BOOL GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, BOOL fInstall)
 {
-	HMODULE hMapiStub = nullptr;
 	BOOL fReturn = FALSE;
 
 	typedef BOOL(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, BOOL);
 
-	hMapiStub = LoadLibraryW(WszMapi32);
+	HMODULE hMapiStub = LoadLibraryW(WszMapi32);
 	if (!hMapiStub) hMapiStub = LoadLibraryW(WszMapiStub);
 
 	if (hMapiStub)
 	{
-		FGetComponentPathType pFGetCompPath = (FGetComponentPathType) GetProcAddress(hMapiStub, SzFGetComponentPath);
+		const FGetComponentPathType pFGetCompPath =
+			reinterpret_cast<FGetComponentPathType>(GetProcAddress(hMapiStub, SzFGetComponentPath));
 
 		fReturn = pFGetCompPath(szComponent, szQualifier, szDllPath, cchBufferSize, fInstall);
 
@@ -305,11 +303,9 @@ HMODULE AttachToMAPIDll(const WCHAR* wzMapiDll)
 	return hinstPrivateMAPI;
 }
 
-void UnLoadPrivateMAPI()
+void UnloadPrivateMAPI()
 {
-	HMODULE hinstPrivateMAPI = nullptr;
-
-	hinstPrivateMAPI = GetMAPIHandle();
+	const HMODULE hinstPrivateMAPI = GetMAPIHandle();
 	if (nullptr != hinstPrivateMAPI)
 	{
 		SetMAPIHandle(nullptr);
