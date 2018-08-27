@@ -39,8 +39,8 @@ const WCHAR WszOutlookMapiClientName[] = L"Microsoft Outlook";
 
 const WCHAR WszMAPISystemPath[] = L"%s\\%s";
 
-static const WCHAR WszPrivateMAPI[] = L"olmapi32.dll";
-static const WCHAR WszPrivateMAPI_11[] = L"msmapi32.dll";
+static const WCHAR WszOlMAPI32DLL[] = L"olmapi32.dll";
+static const WCHAR WszMSMAPI32DLL[] = L"msmapi32.dll";
 static const WCHAR WszMapi32[] = L"mapi32.dll";
 static const WCHAR WszMapiStub[] = L"mapistub.dll";
 
@@ -321,13 +321,13 @@ HMODULE GetPrivateMAPI()
 	if (nullptr == hinstPrivateMAPI)
 	{
 		// First, try to attach to olmapi32.dll if it's loaded in the process
-		hinstPrivateMAPI = AttachToMAPIDll(WszPrivateMAPI);
+		hinstPrivateMAPI = AttachToMAPIDll(WszOlMAPI32DLL);
 
 		// If that fails try msmapi32.dll, for Outlook 11 and below
 		//  Only try this in the static lib, otherwise msmapi32.dll will attach to itself.
 		if (nullptr == hinstPrivateMAPI)
 		{
-			hinstPrivateMAPI = AttachToMAPIDll(WszPrivateMAPI_11);
+			hinstPrivateMAPI = AttachToMAPIDll(WszMSMAPI32DLL);
 		}
 
 		// If MAPI isn't loaded in the process yet, then find the path to the DLL and
