@@ -156,20 +156,28 @@ bool GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DW
 HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
 {
 	HMODULE hinstMapi = nullptr;
-	CHAR rgchMSIComponentID[MAX_PATH];
-	CHAR rgchMSIApplicationLCID[MAX_PATH];
-	CHAR rgchComponentPath[MAX_PATH];
+	CHAR rgchMSIComponentID[MAX_PATH] = {0};
+	CHAR rgchMSIApplicationLCID[MAX_PATH] = {0};
+	CHAR rgchComponentPath[MAX_PATH] = {0};
 	DWORD dwType = 0;
 
-	DWORD dwSizeComponentID = sizeof(rgchMSIComponentID);
-	DWORD dwSizeLCID = sizeof(rgchMSIApplicationLCID);
+	DWORD dwSizeComponentID = sizeof rgchMSIComponentID;
+	DWORD dwSizeLCID = sizeof rgchMSIApplicationLCID;
 
-	if (ERROR_SUCCESS ==
-			RegQueryValueExA(
-				hkeyMapiClient, SzValueNameMSI, 0, &dwType, (LPBYTE) &rgchMSIComponentID, &dwSizeComponentID) &&
-		ERROR_SUCCESS ==
-			RegQueryValueExA(
-				hkeyMapiClient, SzValueNameLCID, 0, &dwType, (LPBYTE) &rgchMSIApplicationLCID, &dwSizeLCID))
+	if (ERROR_SUCCESS == RegQueryValueExA(
+							 hkeyMapiClient,
+							 SzValueNameMSI,
+							 nullptr,
+							 &dwType,
+							 reinterpret_cast<LPBYTE>(&rgchMSIComponentID),
+							 &dwSizeComponentID) &&
+		ERROR_SUCCESS == RegQueryValueExA(
+							 hkeyMapiClient,
+							 SzValueNameLCID,
+							 nullptr,
+							 &dwType,
+							 reinterpret_cast<LPBYTE>(&rgchMSIApplicationLCID),
+							 &dwSizeLCID))
 	{
 		if (GetComponentPath(
 				rgchMSIComponentID, rgchMSIApplicationLCID, rgchComponentPath, _countof(rgchComponentPath), false))
