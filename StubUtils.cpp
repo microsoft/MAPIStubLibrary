@@ -65,7 +65,8 @@ void SetMAPIHandle(HMODULE hinstMAPI)
 
 	if (hinstMAPI == nullptr)
 	{
-		hinstToFree = (HMODULE) InterlockedExchangePointer((PVOID*) &g_hinstMAPI, hinstNULL);
+		hinstToFree = static_cast<HMODULE>(InterlockedExchangePointer(
+			const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstNULL)));
 	}
 	else
 	{
