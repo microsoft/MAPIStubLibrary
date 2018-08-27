@@ -110,7 +110,6 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
 			if ((0 == cch) || (cch > cchValueLen))
 			{
 				dwErr = ERROR_INSUFFICIENT_BUFFER;
-				goto Exit;
 			}
 		}
 		else if (dwType == REG_SZ)
@@ -118,7 +117,7 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
 			wcscpy_s(lpValue, cchValueLen, rgchValue);
 		}
 	}
-Exit:
+
 	return dwErr;
 }
 
