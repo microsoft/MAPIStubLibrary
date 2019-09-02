@@ -376,7 +376,11 @@ namespace mapistub
 		output::logLoadMapi(L"Exit UnloadPrivateMAPI\n");
 	}
 
-	void ForceOutlookMAPI(bool fForce) { s_fForceOutlookMAPI = fForce; }
+	void ForceOutlookMAPI(bool fForce)
+	{
+		output::logLoadMapi(L"ForceOutlookMAPI: fForce = 0x%08X\n", fForce);
+		s_fForceOutlookMAPI = fForce;
+	}
 
 	HMODULE GetPrivateMAPI()
 	{
