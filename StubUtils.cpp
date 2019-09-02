@@ -4,7 +4,7 @@
 #include <winreg.h>
 #include <stdlib.h>
 
-	/*
+/*
 	 * MAPI Stub Utilities
 	 *
 	 * Public Functions:
@@ -71,7 +71,7 @@ void SetMAPIHandle(HMODULE hinstMAPI)
 	else
 	{
 		// Set the value only if the global is nullptr
-		const HMODULE hinstPrev = static_cast<HMODULE>(InterlockedExchangePointer(
+		const auto hinstPrev = static_cast<HMODULE>(InterlockedExchangePointer(
 			const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstMAPI)));
 		if (nullptr != hinstPrev)
 		{
@@ -106,7 +106,7 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
 		if (dwType == REG_EXPAND_SZ)
 		{
 			// Expand the strings
-			DWORD cch = ExpandEnvironmentStringsW(rgchValue, lpValue, cchValueLen);
+			const auto cch = ExpandEnvironmentStringsW(rgchValue, lpValue, cchValueLen);
 			if ((0 == cch) || (cch > cchValueLen))
 			{
 				dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -129,16 +129,16 @@ DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cc
  */
 bool GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, bool fInstall)
 {
-	bool fReturn = false;
+	auto fReturn = false;
 
 	typedef bool(STDAPICALLTYPE * FGetComponentPathType)(LPCSTR, LPSTR, LPSTR, DWORD, bool);
 
-	HMODULE hMapiStub = LoadLibraryW(WszMapi32);
+	auto hMapiStub = LoadLibraryW(WszMapi32);
 	if (!hMapiStub) hMapiStub = LoadLibraryW(WszMapiStub);
 
 	if (hMapiStub)
 	{
-		const FGetComponentPathType pFGetCompPath =
+		const auto pFGetCompPath =
 			reinterpret_cast<FGetComponentPathType>(GetProcAddress(hMapiStub, SzFGetComponentPath));
 
 		fReturn = pFGetCompPath(szComponent, szQualifier, szDllPath, cchBufferSize, fInstall);
@@ -161,8 +161,8 @@ HMODULE LoadMailClientFromMSIData(HKEY hkeyMapiClient)
 	CHAR rgchComponentPath[MAX_PATH] = {0};
 	DWORD dwType = 0;
 
-	DWORD dwSizeComponentID = sizeof rgchMSIComponentID;
-	DWORD dwSizeLCID = sizeof rgchMSIApplicationLCID;
+	DWORD dwSizeComponentID = _countof(rgchMSIComponentID);
+	DWORD dwSizeLCID = _countof(rgchMSIApplicationLCID);
 
 	if (ERROR_SUCCESS == RegQueryValueExA(
 							 hkeyMapiClient,
@@ -313,7 +313,7 @@ HMODULE AttachToMAPIDll(const WCHAR* wzMapiDll)
 
 void UnloadPrivateMAPI()
 {
-	const HMODULE hinstPrivateMAPI = GetMAPIHandle();
+	const auto hinstPrivateMAPI = GetMAPIHandle();
 	if (nullptr != hinstPrivateMAPI)
 	{
 		SetMAPIHandle(nullptr);
@@ -324,7 +324,7 @@ void ForceOutlookMAPI(bool fForce) { s_fForceOutlookMAPI = fForce; }
 
 HMODULE GetPrivateMAPI()
 {
-	HMODULE hinstPrivateMAPI = GetMAPIHandle();
+	auto hinstPrivateMAPI = GetMAPIHandle();
 
 	if (nullptr == hinstPrivateMAPI)
 	{
