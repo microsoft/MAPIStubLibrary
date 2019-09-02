@@ -1,4 +1,4 @@
-#include <winsock2.h>
+#define _WINSOCKAPI_
 #include <Windows.h>
 
 #include <MAPI.h>
@@ -8,8 +8,6 @@
 #include <MAPISPI.h>
 #include <IMessage.h>
 #include <TNEF.h>
-
-#include <strsafe.h>
 
 // Check that we have the Outlook 2010 MAPI headers or higher
 // We do this by checking for the presence of a macro not present in the older headers
@@ -1869,6 +1867,38 @@ DEFINE_STUB_FUNCTION_6(
 	LPSTREAM FAR*,
 	MAPI_E_CALL_FAILED)
 
+#ifdef _INC_WINAPIFAMILY
+DEFINE_STUB_FUNCTION_7(
+	LINKAGE_EXTERN_C,
+	_Check_return_ HRESULT,
+	STDMETHODCALLTYPE,
+	OpenTnefStream,
+	ExpandFunction(OpenTnefStream, 28),
+	LPVOID,
+	LPSTREAM,
+	__in LPTSTR,
+	ULONG,
+	LPMESSAGE,
+	WORD,
+	LPITNEF FAR*,
+	MAPI_E_CALL_FAILED)
+
+DEFINE_STUB_FUNCTION_8(
+	LINKAGE_EXTERN_C,
+	_Check_return_ HRESULT,
+	STDMETHODCALLTYPE,
+	OpenTnefStreamEx,
+	ExpandFunction(OpenTnefStreamEx, 32),
+	LPVOID,
+	LPSTREAM,
+	__in LPTSTR,
+	ULONG,
+	LPMESSAGE,
+	WORD,
+	LPADRBOOK,
+	LPITNEF FAR*,
+	MAPI_E_CALL_FAILED)
+#else
 DEFINE_STUB_FUNCTION_7(
 	LINKAGE_EXTERN_C,
 	HRESULT,
@@ -1899,6 +1929,7 @@ DEFINE_STUB_FUNCTION_8(
 	LPADRBOOK,
 	LPITNEF FAR*,
 	MAPI_E_CALL_FAILED)
+#endif
 
 DEFINE_STUB_FUNCTION_3(
 	LINKAGE_EXTERN_C,
