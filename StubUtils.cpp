@@ -84,6 +84,7 @@ namespace mapistub
 			// have to increment a sequence number to signal that they need to be re-fetched
 			InterlockedIncrement(reinterpret_cast<volatile LONG*>(&g_ulDllSequenceNum));
 		}
+
 		if (nullptr != hinstToFree)
 		{
 			FreeLibrary(hinstToFree);
@@ -91,9 +92,9 @@ namespace mapistub
 	}
 
 	/*
- *  RegQueryWszExpand
- *		Wrapper for RegQueryValueExW which automatically expands REG_EXPAND_SZ values
- */
+	 * RegQueryWszExpand
+	 * Wrapper for RegQueryValueExW which automatically expands REG_EXPAND_SZ values
+	 */
 	DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cchValueLen)
 	{
 		DWORD dwType = 0;
@@ -304,9 +305,9 @@ namespace mapistub
 	}
 
 	/*------------------------------------------------------------------------------
-	Attach to wzMapiDll(olmapi32.dll/msmapi32.dll) if it is already loaded in the
-	current process.
-------------------------------------------------------------------------------*/
+	 Attach to wzMapiDll(olmapi32.dll/msmapi32.dll) if it is already loaded in the
+	 current process.
+	 ------------------------------------------------------------------------------*/
 	HMODULE AttachToMAPIDll(const WCHAR* wzMapiDll)
 	{
 		HMODULE hinstPrivateMAPI = nullptr;
@@ -335,7 +336,7 @@ namespace mapistub
 			hinstPrivateMAPI = AttachToMAPIDll(WszOlMAPI32DLL);
 
 			// If that fails try msmapi32.dll, for Outlook 11 and below
-			//  Only try this in the static lib, otherwise msmapi32.dll will attach to itself.
+			// Only try this in the static lib, otherwise msmapi32.dll will attach to itself.
 			if (nullptr == hinstPrivateMAPI)
 			{
 				hinstPrivateMAPI = AttachToMAPIDll(WszMSMAPI32DLL);
