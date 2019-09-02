@@ -1,3 +1,4 @@
+#include <string>
 #include <Windows.h>
 #include <strsafe.h>
 #include <Msi.h>
@@ -95,34 +96,37 @@ namespace mapistub
 	 * RegQueryWszExpand
 	 * Wrapper for RegQueryValueExW which automatically expands REG_EXPAND_SZ values
 	 */
-	DWORD RegQueryWszExpand(HKEY hKey, LPCWSTR lpValueName, LPWSTR lpValue, DWORD cchValueLen)
+	std::wstring RegQueryWszExpand(HKEY hKey, const std::wstring& lpValueName)
 	{
 		DWORD dwType = 0;
 
+		std::wstring ret;
 		WCHAR rgchValue[MAX_PATH] = {0};
 		DWORD dwSize = sizeof rgchValue;
 
-		DWORD dwErr =
-			RegQueryValueExW(hKey, lpValueName, nullptr, &dwType, reinterpret_cast<LPBYTE>(&rgchValue), &dwSize);
+		const auto dwErr = RegQueryValueExW(
+			hKey, lpValueName.c_str(), nullptr, &dwType, reinterpret_cast<LPBYTE>(&rgchValue), &dwSize);
 
 		if (dwErr == ERROR_SUCCESS)
 		{
 			if (dwType == REG_EXPAND_SZ)
 			{
+				const auto szPath = std::wstring(MAX_PATH, '\0');
 				// Expand the strings
-				const auto cch = ExpandEnvironmentStringsW(rgchValue, lpValue, cchValueLen);
-				if ((0 == cch) || (cch > cchValueLen))
+				const auto cch = ExpandEnvironmentStringsW(
+					rgchValue, const_cast<wchar_t*>(szPath.c_str()), static_cast<DWORD>(szPath.length()));
+				if (0 != cch && cch < MAX_PATH)
 				{
-					dwErr = ERROR_INSUFFICIENT_BUFFER;
+					ret = szPath;
 				}
 			}
 			else if (dwType == REG_SZ)
 			{
-				wcscpy_s(lpValue, cchValueLen, rgchValue);
+				ret = std::wstring(rgchValue);
 			}
 		}
 
-		return dwErr;
+		return ret;
 	}
 
 	/*
@@ -211,29 +215,30 @@ namespace mapistub
 	}
 
 	/*
- *  LoadMailClientFromDllPath
- *		Attempt to locate the MAPI provider DLL via HKLM\Software\Clients\Mail\(provider)\DllPathEx
- */
+	 *  LoadMailClientFromDllPath
+	 *		Attempt to locate the MAPI provider DLL via HKLM\Software\Clients\Mail\(provider)\DllPathEx
+	 */
 	HMODULE LoadMailClientFromDllPath(HKEY hkeyMapiClient)
 	{
 		HMODULE hinstMapi = nullptr;
-		WCHAR rgchDllPath[MAX_PATH];
 
-		DWORD dwSizeDllPath = _countof(rgchDllPath);
+		auto szPath = RegQueryWszExpand(hkeyMapiClient, WszValueNameDllPathEx);
 
-		if (ERROR_SUCCESS == RegQueryWszExpand(hkeyMapiClient, WszValueNameDllPathEx, rgchDllPath, dwSizeDllPath))
+		if (!szPath.empty())
 		{
-			hinstMapi = LoadLibraryW(rgchDllPath);
+			hinstMapi = LoadLibraryW(szPath.c_str());
 		}
 
 		if (!hinstMapi)
 		{
-			dwSizeDllPath = _countof(rgchDllPath);
-			if (ERROR_SUCCESS == RegQueryWszExpand(hkeyMapiClient, WszValueNameDllPath, rgchDllPath, dwSizeDllPath))
+			szPath = RegQueryWszExpand(hkeyMapiClient, WszValueNameDllPath);
+
+			if (!szPath.empty())
 			{
-				hinstMapi = LoadLibraryW(rgchDllPath);
+				hinstMapi = LoadLibraryW(szPath.c_str());
 			}
 		}
+
 		return hinstMapi;
 	}
 
