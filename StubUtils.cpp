@@ -1,9 +1,43 @@
+#include <functional>
 #include <string>
 #include <Windows.h>
 #include <strsafe.h>
 #include <Msi.h>
 #include <winreg.h>
 #include <stdlib.h>
+
+namespace output
+{
+	std::function<void(LPCWSTR szMsg, va_list argList)> logLoadMapiCallback;
+	std::function<void(LPCWSTR szMsg, va_list argList)> logLoadLibraryCallback;
+
+	void __cdecl logLoadMapi(LPCWSTR szMsg, ...)
+	{
+		if (logLoadMapiCallback)
+		{
+			va_list argList = nullptr;
+			va_start(argList, szMsg);
+			logLoadMapiCallback(szMsg, argList);
+			va_end(argList);
+		}
+	}
+
+	void __cdecl logLoadLibrary(LPCWSTR szMsg, ...)
+	{
+		if (logLoadLibraryCallback)
+		{
+			va_list argList = nullptr;
+			va_start(argList, szMsg);
+			logLoadLibraryCallback(szMsg, argList);
+			va_end(argList);
+		}
+	}
+
+	template <class T> void LogError(LPWSTR function, T error)
+	{
+		if (error) logLoadMapi(L"%ws failed with 0x%08X", function, error);
+	}
+} // namespace output
 
 namespace mapistub
 {
