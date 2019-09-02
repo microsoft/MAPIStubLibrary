@@ -97,6 +97,7 @@ namespace mapistub
 
 	void SetMAPIHandle(HMODULE hinstMAPI)
 	{
+		output::logLoadMapi(L"Enter SetMAPIHandle: hinstMAPI = %p\n", hinstMAPI);
 		const HMODULE hinstNULL = nullptr;
 		HMODULE hinstToFree = nullptr;
 
@@ -124,6 +125,8 @@ namespace mapistub
 		{
 			FreeLibrary(hinstToFree);
 		}
+
+		output::logLoadMapi(L"Exit SetMAPIHandle\n");
 	}
 
 	/*
@@ -132,6 +135,7 @@ namespace mapistub
 	 */
 	std::wstring RegQueryWszExpand(HKEY hKey, const std::wstring& lpValueName)
 	{
+		output::logLoadMapi(L"Enter RegQueryWszExpand: hKey = %p, lpValueName = %ws\n", hKey, lpValueName.c_str());
 		DWORD dwType = 0;
 
 		std::wstring ret;
@@ -143,6 +147,7 @@ namespace mapistub
 
 		if (dwErr == ERROR_SUCCESS)
 		{
+			output::logLoadMapi(L"RegQueryWszExpand: rgchValue = %ws\n", rgchValue);
 			if (dwType == REG_EXPAND_SZ)
 			{
 				const auto szPath = std::wstring(MAX_PATH, '\0');
@@ -151,6 +156,7 @@ namespace mapistub
 					rgchValue, const_cast<wchar_t*>(szPath.c_str()), static_cast<DWORD>(szPath.length()));
 				if (0 != cch && cch < MAX_PATH)
 				{
+					output::logLoadMapi(L"RegQueryWszExpand: rgchValue(expanded) = %ws\n", szPath.c_str());
 					ret = szPath;
 				}
 			}
@@ -160,15 +166,15 @@ namespace mapistub
 			}
 		}
 
+		output::logLoadMapi(L"Exit RegQueryWszExpand: dwErr = 0x%08X\n", dwErr);
 		return ret;
 	}
 
 	/*
- *  GetComponentPath
- *		Wrapper around mapi32.dll->FGetComponentPath which maps an MSI component ID to
- *		a DLL location from the default MAPI client registration values
- *
- */
+	 * GetComponentPath
+	 * Wrapper around mapi32.dll->FGetComponentPath which maps an MSI component ID to
+	 * a DLL location from the default MAPI client registration values
+	 */
 	bool GetComponentPath(LPCSTR szComponent, LPSTR szQualifier, LPSTR szDllPath, DWORD cchBufferSize, bool fInstall)
 	{
 		auto fReturn = false;
@@ -325,6 +331,7 @@ namespace mapistub
 
 	HMODULE GetDefaultMapiHandle()
 	{
+		output::logLoadMapi(L"Enter GetDefaultMapiHandle\n");
 		HMODULE hinstMapi = nullptr;
 
 		// Try to respect the machine's default MAPI client settings.  If the active MAPI provider
@@ -340,6 +347,7 @@ namespace mapistub
 			hinstMapi = LoadMAPIFromSystemDir();
 		}
 
+		output::logLoadMapi(L"Exit GetDefaultMapiHandle: hinstMapi = %p\n", hinstMapi);
 		return hinstMapi;
 	}
 
@@ -349,24 +357,30 @@ namespace mapistub
 	 ------------------------------------------------------------------------------*/
 	HMODULE AttachToMAPIDll(const WCHAR* wzMapiDll)
 	{
+		output::logLoadMapi(L"Enter AttachToMAPIDll: wzMapiDll = %ws\n", wzMapiDll);
 		HMODULE hinstPrivateMAPI = nullptr;
 		GetModuleHandleExW(0UL, wzMapiDll, &hinstPrivateMAPI);
+		output::logLoadMapi(L"Exit AttachToMAPIDll: hinstPrivateMAPI = %p\n", hinstPrivateMAPI);
 		return hinstPrivateMAPI;
 	}
 
 	void UnloadPrivateMAPI()
 	{
+		output::logLoadMapi(L"Enter UnloadPrivateMAPI\n");
 		const auto hinstPrivateMAPI = GetMAPIHandle();
 		if (nullptr != hinstPrivateMAPI)
 		{
 			SetMAPIHandle(nullptr);
 		}
+
+		output::logLoadMapi(L"Exit UnloadPrivateMAPI\n");
 	}
 
 	void ForceOutlookMAPI(bool fForce) { s_fForceOutlookMAPI = fForce; }
 
 	HMODULE GetPrivateMAPI()
 	{
+		output::logLoadMapi(L"Enter GetPrivateMAPI\n");
 		auto hinstPrivateMAPI = GetMAPIHandle();
 
 		if (nullptr == hinstPrivateMAPI)
@@ -396,9 +410,11 @@ namespace mapistub
 			// Reason - if for any reason there is an instance already loaded, SetMAPIHandle()
 			// will free the new one and reuse the old one
 			// So we fetch the instance from the global again
+			output::logLoadMapi(L"Exit GetPrivateMAPI: Returning GetMAPIHandle()\n");
 			return GetMAPIHandle();
 		}
 
+		output::logLoadMapi(L"Exit GetPrivateMAPI, hinstPrivateMAPI = %p\n", hinstPrivateMAPI);
 		return hinstPrivateMAPI;
 	}
 } // namespace mapistub
