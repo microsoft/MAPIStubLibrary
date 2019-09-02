@@ -4,26 +4,26 @@
 #include <winreg.h>
 #include <stdlib.h>
 
-/*
- *  MAPI Stub Utilities
- *
- *	Public Functions:
- *
- *		GetPrivateMAPI()
- *			Obtain a handle to the MAPI DLL.  This function will load the MAPI DLL
- *			if it hasn't already been loaded
- *
- *		UnloadPrivateMAPI()
- *			Forces the MAPI DLL to be unloaded.  This can cause problems if the code
- *			still has outstanding allocated MAPI memory, or unmatched calls to
- *			MAPIInitialize/MAPIUninitialize
- *
- *		ForceOutlookMAPI()
- *			Instructs the stub code to always try loading the Outlook version of MAPI
- *			on the system, instead of respecting the system MAPI registration
- *			(HKLM\Software\Clients\Mail). This call must be made prior to any MAPI
- *			function calls.
- */
+	/*
+	 * MAPI Stub Utilities
+	 *
+	 * Public Functions:
+	 *
+	 * GetPrivateMAPI()
+	 * Obtain a handle to the MAPI DLL. This function will load the MAPI DLL
+	 * if it hasn't already been loaded
+	 *
+	 * UnloadPrivateMAPI()
+	 * Forces the MAPI DLL to be unloaded. This can cause problems if the code
+	 * still has outstanding allocated MAPI memory, or unmatched calls to
+	 * MAPIInitialize/MAPIUninitialize
+	 *
+	 * ForceOutlookMAPI()
+	 * Instructs the stub code to always try loading the Outlook version of MAPI
+	 * on the system, instead of respecting the system MAPI registration
+	 * (HKLM\Software\Clients\Mail). This call must be made prior to any MAPI
+	 * function calls.
+	 */
 HMODULE GetPrivateMAPI();
 void UnloadPrivateMAPI();
 void ForceOutlookMAPI();
