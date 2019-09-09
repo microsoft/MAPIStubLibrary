@@ -46,7 +46,7 @@ namespace file
 		do
 		{
 			path.resize(path.size() + MAX_PATH);
-			copied = ::GetSystemDirectoryW(&path[0], static_cast<UINT>(path.size()));
+			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), UINT(path.size()));
 			if (!copied)
 			{
 				const auto dwErr = GetLastError();
@@ -128,15 +128,23 @@ namespace import
 			auto szOutlookMAPIPath = mapistub::GetInstalledOutlookMAPI(component);
 			if (!szOutlookMAPIPath.empty())
 			{
-				WCHAR szDrive[_MAX_DRIVE] = {0};
-				WCHAR szMAPIPath[MAX_PATH] = {0};
+				auto szDrive = std::wstring(_MAX_DRIVE, '\0');
+				auto szMAPIPath = std::wstring(MAX_PATH, '\0');
 				const auto errNo = _wsplitpath_s(
-					szOutlookMAPIPath.c_str(), szDrive, _MAX_DRIVE, szMAPIPath, MAX_PATH, nullptr, NULL, nullptr, NULL);
+					szOutlookMAPIPath.c_str(),
+					const_cast<LPWSTR>(szDrive.c_str()),
+					szDrive.length(),
+					const_cast<LPWSTR>(szMAPIPath.c_str()),
+					szMAPIPath.length(),
+					nullptr,
+					NULL,
+					nullptr,
+					NULL);
 				output::LogError(L"LoadFromOLMAPIDir: _wsplitpath_s", errNo);
 
 				if (errNo == ERROR_SUCCESS)
 				{
-					auto szFullPath = std::wstring(szDrive) + std::wstring(szMAPIPath) + szDLLName;
+					auto szFullPath = szDrive + szMAPIPath + szDLLName;
 
 					output::logLoadLibrary(L"LoadFromOLMAPIDir - loading from \"%ws\"\n", szFullPath.c_str());
 					hModRet = LoadLibraryW(szFullPath.c_str());
@@ -253,12 +261,11 @@ namespace mapistub
 	static volatile HMODULE g_hinstMAPI = nullptr;
 	HMODULE g_hModPstPrx32 = nullptr;
 
-	HMODULE GetMAPIHandle() { return g_hinstMAPI; }
+	HMODULE GetMAPIHandle() noexcept { return g_hinstMAPI; }
 
 	void SetMAPIHandle(HMODULE hinstMAPI)
 	{
 		output::logLoadMapi(L"Enter SetMAPIHandle: hinstMAPI = %p\n", hinstMAPI);
-		const HMODULE hinstNULL = nullptr;
 		HMODULE hinstToFree = nullptr;
 
 		if (hinstMAPI == nullptr)
@@ -270,8 +277,8 @@ namespace mapistub
 				g_hModPstPrx32 = nullptr;
 			}
 
-			hinstToFree = static_cast<HMODULE>(InterlockedExchangePointer(
-				const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstNULL)));
+			hinstToFree = static_cast<HMODULE>(
+				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), nullptr));
 		}
 		else
 		{
@@ -283,12 +290,12 @@ namespace mapistub
 
 			// Code Analysis gives us a C28112 error when we use InterlockedCompareExchangePointer, so we instead exchange, check and exchange back
 			//hinstPrev = (HMODULE)InterlockedCompareExchangePointer(reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
-			const auto hinstPrev = static_cast<HMODULE>(InterlockedExchangePointer(
-				const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstMAPI)));
+			const auto hinstPrev =
+				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), hinstMAPI);
 			if (nullptr != hinstPrev)
 			{
 				(void) InterlockedExchangePointer(
-					const_cast<PVOID*>(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI)), static_cast<PVOID>(hinstPrev));
+					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev));
 				hinstToFree = hinstMAPI;
 			}
 
@@ -315,21 +322,26 @@ namespace mapistub
 		DWORD dwType = 0;
 
 		std::wstring ret;
-		WCHAR rgchValue[MAX_PATH] = {0};
-		DWORD dwSize = sizeof rgchValue;
+		auto rgchValue = std::wstring(MAX_PATH, '\0');
+		auto dwSize = static_cast<DWORD>(rgchValue.length());
 
 		const auto dwErr = RegQueryValueExW(
-			hKey, lpValueName.c_str(), nullptr, &dwType, reinterpret_cast<LPBYTE>(&rgchValue), &dwSize);
+			hKey,
+			lpValueName.c_str(),
+			nullptr,
+			&dwType,
+			reinterpret_cast<LPBYTE>(const_cast<wchar_t*>(rgchValue.data())),
+			&dwSize);
 
 		if (dwErr == ERROR_SUCCESS)
 		{
-			output::logLoadMapi(L"RegQueryWszExpand: rgchValue = %ws\n", rgchValue);
+			output::logLoadMapi(L"RegQueryWszExpand: rgchValue = %ws\n", rgchValue.c_str());
 			if (dwType == REG_EXPAND_SZ)
 			{
 				const auto szPath = std::wstring(MAX_PATH, '\0');
 				// Expand the strings
 				const auto cch = ExpandEnvironmentStringsW(
-					rgchValue, const_cast<wchar_t*>(szPath.c_str()), static_cast<DWORD>(szPath.length()));
+					rgchValue.c_str(), const_cast<wchar_t*>(szPath.c_str()), static_cast<DWORD>(szPath.length()));
 				if (0 != cch && cch < MAX_PATH)
 				{
 					output::logLoadMapi(L"RegQueryWszExpand: rgchValue(expanded) = %ws\n", szPath.c_str());
@@ -338,7 +350,7 @@ namespace mapistub
 			}
 			else if (dwType == REG_SZ)
 			{
-				ret = std::wstring(rgchValue);
+				ret = rgchValue;
 			}
 		}
 
@@ -598,7 +610,7 @@ namespace mapistub
 
 			if (errNo == ERROR_SUCCESS)
 			{
-				auto szPath = std::wstring(szDrive) + std::wstring(szOutlookPath) + WszOlMAPI32DLL;
+				const auto szPath = std::wstring(szDrive) + std::wstring(szOutlookPath) + WszOlMAPI32DLL;
 
 				output::logLoadMapi(L"GetInstalledOutlookMAPI: found %ws\n", szPath.c_str());
 				return szPath;
@@ -696,8 +708,7 @@ namespace mapistub
 	void UnloadPrivateMAPI()
 	{
 		output::logLoadMapi(L"Enter UnloadPrivateMAPI\n");
-		const auto hinstPrivateMAPI = GetMAPIHandle();
-		if (nullptr != hinstPrivateMAPI)
+		if (GetMAPIHandle() != nullptr)
 		{
 			SetMAPIHandle(nullptr);
 		}
