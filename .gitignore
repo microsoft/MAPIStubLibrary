@@ -3,5 +3,6 @@
 ################################################################################
 
 /.vs
-/bin
-/obj
+/vs2017/ExampleMapiConsoleApp/.vs/ExampleMapiConsoleApp/v15
+/vs2017/ExampleMapiConsoleApp/Debug
+/vs2017/MapiStubLibrary/Debug
