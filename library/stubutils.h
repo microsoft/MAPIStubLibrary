@@ -11,9 +11,9 @@ namespace mapistub
 	std::wstring GetSystemDirectory();
 
 	_Check_return_ HMODULE LoadFromSystemDir(_In_ const std::wstring& szDLLName);
-	HMODULE& GetHModMSI();
-	HMODULE& GetHModKernel32();
 
+	extern HMODULE hModKernel32;
+	extern HMODULE hModMSI;
 	// Loads szModule at the handle given by hModule, then looks for szEntryPoint.
 	// Will not load a module or entry point twice
 	void LoadProc(_In_ const std::wstring& szModule, HMODULE& hModule, LPCSTR szEntryPoint, FARPROC& lpfn);

@@ -152,7 +152,6 @@ namespace mapistub
 
 	// From kernel32.dll
 	HMODULE hModKernel32 = nullptr;
-	HMODULE& GetHModKernel32() { return hModKernel32; }
 	typedef bool(WINAPI GETMODULEHANDLEEXW)(DWORD dwFlags, LPCWSTR lpModuleName, HMODULE* phModule);
 	GETMODULEHANDLEEXW* pfnGetModuleHandleExW = nullptr;
 	BOOL WINAPI MyGetModuleHandleExW(DWORD dwFlags, LPCWSTR lpModuleName, HMODULE* phModule)
@@ -171,7 +170,6 @@ namespace mapistub
 
 	// From MSI.dll
 	HMODULE hModMSI = nullptr;
-	HMODULE& GetHModMSI() { return hModMSI; }
 	typedef HRESULT(STDMETHODCALLTYPE MSIPROVIDEQUALIFIEDCOMPONENT)(
 		LPCWSTR szCategory,
 		LPCWSTR szQualifier,
