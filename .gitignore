@@ -3,11 +3,5 @@
 ################################################################################
 
 /.vs
-/vs201*/ExampleMapiConsoleApp/.vs/
-/vs201*/ExampleMapiConsoleApp/Debug
-/vs201*/ExampleMapiConsoleApp/Release
-/vs201*/ExampleMapiConsoleApp/x64
-/vs201*/MapiStubLibrary/.vs/
-/vs201*/MapiStubLibrary/Debug
-/vs201*/MapiStubLibrary/Release
-/vs201*/MapiStubLibrary/x64
+/bin
+/obj
