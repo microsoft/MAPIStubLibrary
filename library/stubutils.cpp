@@ -435,8 +435,7 @@ namespace mapistub
 			if (status == ERROR_SUCCESS)
 			{
 				defaultClient = rgchMailClient;
-				logLoadMapi(
-					L"GetHKeyMapiClient: HKLM\\%ws = %ws\n", WszKeyNameMailClient, defaultClient.c_str());
+				logLoadMapi(L"GetHKeyMapiClient: HKLM\\%ws = %ws\n", WszKeyNameMailClient, defaultClient.c_str());
 			}
 		}
 
@@ -454,8 +453,7 @@ namespace mapistub
 			}
 		}
 
-		logLoadMapi(
-			L"Exit GetHKeyMapiClient.hkeyMapiClient found (%ws)\n", hkeyMapiClient ? L"true" : L"false");
+		logLoadMapi(L"Exit GetHKeyMapiClient.hkeyMapiClient found (%ws)\n", hkeyMapiClient ? L"true" : L"false");
 
 		if (hMailKey) RegCloseKey(hMailKey);
 		return hkeyMapiClient;
@@ -657,6 +655,57 @@ namespace mapistub
 		return hinstPrivateMAPI;
 	}
 
+	HMODULE GetMAPIHandle() noexcept { return g_hinstMAPI; }
+
+	void SetMAPIHandle(HMODULE hinstMAPI)
+	{
+		logLoadMapi(L"Enter SetMAPIHandle: hinstMAPI = %p\n", hinstMAPI);
+		HMODULE hinstToFree = nullptr;
+
+		if (hinstMAPI == nullptr)
+		{
+			// If we've preloaded pstprx32.dll, unload it before MAPI is unloaded to prevent dependency problems
+			if (g_hModPstPrx32)
+			{
+				FreeLibrary(g_hModPstPrx32);
+				g_hModPstPrx32 = nullptr;
+			}
+
+			hinstToFree = static_cast<HMODULE>(
+				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), nullptr));
+		}
+		else
+		{
+			// Preload pstprx32 to prevent crash when using autodiscover to build a new profile
+			if (!g_hModPstPrx32)
+			{
+				g_hModPstPrx32 = LoadFromOLMAPIDir(L"pstprx32.dll"); // STRING_OK
+			}
+
+			// Code Analysis gives us a C28112 error when we use InterlockedCompareExchangePointer, so we instead exchange, check and exchange back
+			//hinstPrev = (HMODULE)InterlockedCompareExchangePointer(reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
+			const auto hinstPrev =
+				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), hinstMAPI);
+			if (nullptr != hinstPrev)
+			{
+				(void) InterlockedExchangePointer(
+					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev));
+				hinstToFree = hinstMAPI;
+			}
+
+			// If we've updated our MAPI handle, any previous addressed fetched via GetProcAddress are invalid, so we
+			// have to increment a sequence number to signal that they need to be re-fetched
+			InterlockedIncrement(reinterpret_cast<volatile LONG*>(&g_ulDllSequenceNum));
+		}
+
+		if (nullptr != hinstToFree)
+		{
+			FreeLibrary(hinstToFree);
+		}
+
+		logLoadMapi(L"Exit SetMAPIHandle\n");
+	}
+
 	HMODULE GetPrivateMAPI()
 	{
 		logLoadMapi(L"Enter GetPrivateMAPI\n");
@@ -718,56 +767,5 @@ namespace mapistub
 	{
 		logLoadMapi(L"ForceSystemMAPI: fForce = 0x%08X\n", fForce);
 		s_fForceSystemMAPI = fForce;
-	}
-
-	HMODULE GetMAPIHandle() noexcept { return g_hinstMAPI; }
-
-	void SetMAPIHandle(HMODULE hinstMAPI)
-	{
-		logLoadMapi(L"Enter SetMAPIHandle: hinstMAPI = %p\n", hinstMAPI);
-		HMODULE hinstToFree = nullptr;
-
-		if (hinstMAPI == nullptr)
-		{
-			// If we've preloaded pstprx32.dll, unload it before MAPI is unloaded to prevent dependency problems
-			if (g_hModPstPrx32)
-			{
-				FreeLibrary(g_hModPstPrx32);
-				g_hModPstPrx32 = nullptr;
-			}
-
-			hinstToFree = static_cast<HMODULE>(
-				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), nullptr));
-		}
-		else
-		{
-			// Preload pstprx32 to prevent crash when using autodiscover to build a new profile
-			if (!g_hModPstPrx32)
-			{
-				g_hModPstPrx32 = LoadFromOLMAPIDir(L"pstprx32.dll"); // STRING_OK
-			}
-
-			// Code Analysis gives us a C28112 error when we use InterlockedCompareExchangePointer, so we instead exchange, check and exchange back
-			//hinstPrev = (HMODULE)InterlockedCompareExchangePointer(reinterpret_cast<volatile PVOID*>(&g_hinstMAPI), hinstMAPI, hinstNULL);
-			const auto hinstPrev =
-				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), hinstMAPI);
-			if (nullptr != hinstPrev)
-			{
-				(void) InterlockedExchangePointer(
-					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev));
-				hinstToFree = hinstMAPI;
-			}
-
-			// If we've updated our MAPI handle, any previous addressed fetched via GetProcAddress are invalid, so we
-			// have to increment a sequence number to signal that they need to be re-fetched
-			InterlockedIncrement(reinterpret_cast<volatile LONG*>(&g_ulDllSequenceNum));
-		}
-
-		if (nullptr != hinstToFree)
-		{
-			FreeLibrary(hinstToFree);
-		}
-
-		logLoadMapi(L"Exit SetMAPIHandle\n");
 	}
 } // namespace mapistub

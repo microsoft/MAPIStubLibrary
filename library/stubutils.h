@@ -42,11 +42,11 @@ namespace mapistub
 	std::wstring GetInstalledOutlookMAPI(int iOutlook);
 	std::wstring GetMAPISystemDir();
 
+	HMODULE GetMAPIHandle() noexcept;
+	void SetMAPIHandle(HMODULE hinstMAPI);
+
 	HMODULE GetPrivateMAPI();
 	void UnloadPrivateMAPI();
 	void ForceOutlookMAPI(bool fForce);
 	void ForceSystemMAPI(bool fForce);
-
-	HMODULE GetMAPIHandle() noexcept;
-	void SetMAPIHandle(HMODULE hinstMAPI);
 } // namespace mapistub
