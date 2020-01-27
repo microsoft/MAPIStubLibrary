@@ -3,14 +3,11 @@
 #include <vector>
 #include <string>
 
-namespace output
+namespace mapistub
 {
 	extern std::function<void(LPCWSTR szMsg, va_list argList)> logLoadMapiCallback;
 	extern std::function<void(LPCWSTR szMsg, va_list argList)> logLoadLibraryCallback;
-} // namespace output
 
-namespace mapistub
-{
 	std::wstring GetSystemDirectory();
 
 	_Check_return_ HMODULE LoadFromSystemDir(_In_ const std::wstring& szDLLName);
