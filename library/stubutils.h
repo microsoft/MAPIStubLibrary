@@ -12,25 +12,15 @@ namespace output
 namespace mapistub
 {
 	std::wstring GetSystemDirectory();
-} // namespace mapistub
 
-namespace import
-{
 	_Check_return_ HMODULE LoadFromSystemDir(_In_ const std::wstring& szDLLName);
+	HMODULE& GetHModMSI();
+	HMODULE& GetHModKernel32();
 
 	// Loads szModule at the handle given by hModule, then looks for szEntryPoint.
 	// Will not load a module or entry point twice
 	void LoadProc(_In_ const std::wstring& szModule, HMODULE& hModule, LPCSTR szEntryPoint, FARPROC& lpfn);
-	template <class T> void LoadProc(_In_ const std::wstring& szModule, HMODULE& hModule, LPCSTR szEntryPoint, T& lpfn)
-	{
-		FARPROC lpfnFP = {};
-		LoadProc(szModule, hModule, szEntryPoint, lpfnFP);
-		lpfn = reinterpret_cast<T>(lpfnFP);
-	}
-} // namespace import
 
-namespace mapistub
-{
 	extern volatile ULONG g_ulDllSequenceNum;
 	// Keep this in sync with g_pszOutlookQualifiedComponents
 	enum officeComponent

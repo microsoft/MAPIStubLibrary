@@ -73,10 +73,7 @@ namespace mapistub
 
 	std::wstring GetInstalledOutlookMAPI(int iOutlook);
 	std::wstring GetInstalledOutlookMAPI(const std::wstring component);
-} // namespace mapistub
 
-namespace import
-{
 	_Check_return_ HMODULE LoadFromSystemDir(_In_ const std::wstring& szDLLName)
 	{
 		if (szDLLName.empty()) return nullptr;
@@ -104,7 +101,7 @@ namespace import
 		if (!szEntryPoint) return;
 		if (!hModule && !szModule.empty())
 		{
-			hModule = import::LoadFromSystemDir(szModule);
+			hModule = LoadFromSystemDir(szModule);
 		}
 
 		if (!hModule) return;
@@ -158,6 +155,7 @@ namespace import
 
 	// From kernel32.dll
 	HMODULE hModKernel32 = nullptr;
+	HMODULE& GetHModKernel32() { return hModKernel32; }
 	typedef bool(WINAPI GETMODULEHANDLEEXW)(DWORD dwFlags, LPCWSTR lpModuleName, HMODULE* phModule);
 	GETMODULEHANDLEEXW* pfnGetModuleHandleExW = nullptr;
 	BOOL WINAPI MyGetModuleHandleExW(DWORD dwFlags, LPCWSTR lpModuleName, HMODULE* phModule)
@@ -165,7 +163,7 @@ namespace import
 		if (!pfnGetModuleHandleExW)
 		{
 			FARPROC lpfnFP = {};
-			import::LoadProc(L"kernel32.dll", hModKernel32, "GetModuleHandleExW", lpfnFP); // STRING_OK;
+			LoadProc(L"kernel32.dll", hModKernel32, "GetModuleHandleExW", lpfnFP); // STRING_OK;
 			pfnGetModuleHandleExW = reinterpret_cast<GETMODULEHANDLEEXW*>(lpfnFP);
 		}
 
@@ -176,6 +174,7 @@ namespace import
 
 	// From MSI.dll
 	HMODULE hModMSI = nullptr;
+	HMODULE& GetHModMSI() { return hModMSI; }
 	typedef HRESULT(STDMETHODCALLTYPE MSIPROVIDEQUALIFIEDCOMPONENT)(
 		LPCWSTR szCategory,
 		LPCWSTR szQualifier,
@@ -193,7 +192,7 @@ namespace import
 		if (!pfnMsiProvideQualifiedComponent)
 		{
 			FARPROC lpfnFP = {};
-			import::LoadProc(L"msi.dll", hModMSI, "MsiProvideQualifiedComponentW", lpfnFP); // STRING_OK;
+			LoadProc(L"msi.dll", hModMSI, "MsiProvideQualifiedComponentW", lpfnFP); // STRING_OK;
 			pfnMsiProvideQualifiedComponent = reinterpret_cast<MSIPROVIDEQUALIFIEDCOMPONENT*>(lpfnFP);
 		}
 
@@ -201,10 +200,7 @@ namespace import
 			return pfnMsiProvideQualifiedComponent(szCategory, szQualifier, dwInstallMode, lpPathBuf, pcchPathBuf);
 		return MAPI_E_CALL_FAILED;
 	}
-} // namespace import
 
-namespace mapistub
-{
 	/*
 	 * MAPI Stub Utilities
 	 *
@@ -284,7 +280,7 @@ namespace mapistub
 			// Preload pstprx32 to prevent crash when using autodiscover to build a new profile
 			if (!g_hModPstPrx32)
 			{
-				g_hModPstPrx32 = import::LoadFromOLMAPIDir(L"pstprx32.dll"); // STRING_OK
+				g_hModPstPrx32 = LoadFromOLMAPIDir(L"pstprx32.dll"); // STRING_OK
 			}
 
 			// Code Analysis gives us a C28112 error when we use InterlockedCompareExchangePointer, so we instead exchange, check and exchange back
@@ -525,7 +521,7 @@ namespace mapistub
 
 		if (lpb64) *lpb64 = false;
 
-		auto hRes = import::MyMsiProvideQualifiedComponent(
+		auto hRes = MyMsiProvideQualifiedComponent(
 			szCategory.c_str(),
 			L"outlook.x64.exe", // STRING_OK
 			static_cast<DWORD>(INSTALLMODE_DEFAULT),
@@ -538,7 +534,7 @@ namespace mapistub
 		}
 		else
 		{
-			hRes = import::MyMsiProvideQualifiedComponent(
+			hRes = MyMsiProvideQualifiedComponent(
 				szCategory.c_str(),
 				L"outlook.exe", // STRING_OK
 				static_cast<DWORD>(INSTALLMODE_DEFAULT),
@@ -552,7 +548,7 @@ namespace mapistub
 			dwValueBuf += 1;
 			const auto lpszTempPath = std::wstring(dwValueBuf, '\0');
 
-			hRes = import::MyMsiProvideQualifiedComponent(
+			hRes = MyMsiProvideQualifiedComponent(
 				szCategory.c_str(),
 				L"outlook.x64.exe", // STRING_OK
 				static_cast<DWORD>(INSTALLMODE_DEFAULT),
@@ -561,7 +557,7 @@ namespace mapistub
 			output::LogError(L"GetOutlookPath: MsiProvideQualifiedComponent(x64)", hRes);
 			if (FAILED(hRes))
 			{
-				hRes = import::MyMsiProvideQualifiedComponent(
+				hRes = MyMsiProvideQualifiedComponent(
 					szCategory.c_str(),
 					L"outlook.exe", // STRING_OK
 					static_cast<DWORD>(INSTALLMODE_DEFAULT),
@@ -707,7 +703,7 @@ namespace mapistub
 	{
 		output::logLoadMapi(L"Enter AttachToMAPIDll: wzMapiDll = %ws\n", wzMapiDll);
 		HMODULE hinstPrivateMAPI = nullptr;
-		import::MyGetModuleHandleExW(0UL, wzMapiDll, &hinstPrivateMAPI);
+		MyGetModuleHandleExW(0UL, wzMapiDll, &hinstPrivateMAPI);
 		output::logLoadMapi(L"Exit AttachToMAPIDll: hinstPrivateMAPI = %p\n", hinstPrivateMAPI);
 		return hinstPrivateMAPI;
 	}
