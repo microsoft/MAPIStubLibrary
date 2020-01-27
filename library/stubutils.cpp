@@ -38,7 +38,7 @@ namespace output
 	}
 } // namespace output
 
-namespace file
+namespace mapistub
 {
 	std::wstring GetSystemDirectory()
 	{
@@ -61,10 +61,7 @@ namespace file
 		output::logLoadMapi(L"Exit GetSystemDirectory: found %ws\n", path.c_str());
 		return path;
 	}
-} // namespace file
 
-namespace mapistub
-{
 	std::vector<std::wstring> g_pszOutlookQualifiedComponents = {
 		L"{5812C571-53F0-4467-BEFA-0A4F47A9437C}", // O16_CATEGORY_GUID_CORE_OFFICE (retail) // STRING_OK
 		L"{E83B4360-C208-4325-9504-0D23003A74A5}", // O15_CATEGORY_GUID_CORE_OFFICE (retail) // STRING_OK
@@ -91,7 +88,7 @@ namespace import
 
 		if (!bSystemDirLoaded)
 		{
-			szSystemDir = file::GetSystemDirectory();
+			szSystemDir = mapistub::GetSystemDirectory();
 			bSystemDirLoaded = true;
 		}
 
@@ -458,7 +455,7 @@ namespace mapistub
 	* GetMAPISystemDir
 	* Fall back for loading System32\Mapi32.dll if all else fails
 	*/
-	std::wstring GetMAPISystemDir() { return file::GetSystemDirectory() + L"\\" + std::wstring(WszMapi32); }
+	std::wstring GetMAPISystemDir() { return GetSystemDirectory() + L"\\" + std::wstring(WszMapi32); }
 
 	HKEY GetHKeyMapiClient(const std::wstring& pwzProviderOverride)
 	{

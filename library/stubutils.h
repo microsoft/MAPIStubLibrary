@@ -9,10 +9,10 @@ namespace output
 	extern std::function<void(LPCWSTR szMsg, va_list argList)> logLoadLibraryCallback;
 } // namespace output
 
-namespace file
+namespace mapistub
 {
 	std::wstring GetSystemDirectory();
-} // namespace file
+} // namespace mapistub
 
 namespace import
 {
