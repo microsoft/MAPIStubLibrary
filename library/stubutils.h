@@ -3,8 +3,12 @@
 #include <vector>
 #include <string>
 
+// stubutils.h - Optional header to enable clients to reuse stubutils code
+// Not reuqired to build the mapistub library
+
 namespace mapistub
 {
+	// Assign callbacks to these to enable logging
 	extern std::function<void(LPCWSTR szMsg, va_list argList)> logLoadMapiCallback;
 	extern std::function<void(LPCWSTR szMsg, va_list argList)> logLoadLibraryCallback;
 
@@ -30,12 +34,6 @@ namespace mapistub
 		oqcOffice11Debug = 5
 	};
 
-	HMODULE GetMAPIHandle() noexcept;
-	void UnloadPrivateMAPI();
-	void ForceOutlookMAPI(bool fForce);
-	void ForceSystemMAPI(bool fForce);
-	void SetMAPIHandle(HMODULE hinstMAPI);
-	HMODULE GetPrivateMAPI();
 	std::wstring GetComponentPath(const std::wstring& szComponent, const std::wstring& szQualifier, bool fInstall);
 	extern std::vector<std::wstring> g_pszOutlookQualifiedComponents;
 	std::vector<std::wstring> GetMAPIPaths();
@@ -43,4 +41,12 @@ namespace mapistub
 	std::wstring GetOutlookPath(_In_ const std::wstring& szCategory, _Out_opt_ bool* lpb64);
 	std::wstring GetInstalledOutlookMAPI(int iOutlook);
 	std::wstring GetMAPISystemDir();
+
+	HMODULE GetPrivateMAPI();
+	void UnloadPrivateMAPI();
+	void ForceOutlookMAPI(bool fForce);
+	void ForceSystemMAPI(bool fForce);
+
+	HMODULE GetMAPIHandle() noexcept;
+	void SetMAPIHandle(HMODULE hinstMAPI);
 } // namespace mapistub
