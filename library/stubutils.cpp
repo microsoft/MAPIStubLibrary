@@ -71,7 +71,7 @@ namespace mapistub
 		do
 		{
 			path.resize(path.size() + MAX_PATH);
-			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), UINT(path.size()));
+			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), static_cast<UINT>(path.size()));
 			if (!copied)
 			{
 				const auto dwErr = GetLastError();
@@ -688,8 +688,8 @@ namespace mapistub
 				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), hinstMAPI);
 			if (nullptr != hinstPrev)
 			{
-				(void) InterlockedExchangePointer(
-					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev));
+				static_cast<void>(InterlockedExchangePointer(
+					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev)));
 				hinstToFree = hinstMAPI;
 			}
 
