@@ -5,6 +5,14 @@
 #include <MAPIX.h>
 #include <Msi.h>
 
+// clang-format off
+#pragma warning(disable : 26426) // Warning C26426 Global initializer calls a non-constexpr (i.22)
+#pragma warning(disable : 26446) // Warning C26446 Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable : 26481) // Warning C26481 Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable : 26485) // Warning C26485 Expression '': No array to pointer decay (bounds.3).
+#pragma warning(disable : 26487) // Warning C26487 Don't return a pointer '' that may be invalid (lifetime.4).
+// clang-format on
+
 namespace mapistub
 {
 	/*
@@ -71,7 +79,7 @@ namespace mapistub
 		do
 		{
 			path.resize(path.size() + MAX_PATH);
-			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), UINT(path.size()));
+			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), static_cast<UINT>(path.size()));
 			if (!copied)
 			{
 				const auto dwErr = GetLastError();
@@ -338,7 +346,7 @@ namespace mapistub
 			if (pFGetCompPath)
 			{
 				CHAR lpszPath[MAX_PATH] = {0};
-				const ULONG cchPath = _countof(lpszPath);
+				const constexpr ULONG cchPath = _countof(lpszPath);
 
 				auto szComponentA = wstringTostring(szComponent);
 				auto szQualifierA = wstringTostring(szQualifier);
@@ -688,8 +696,8 @@ namespace mapistub
 				InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), hinstMAPI);
 			if (nullptr != hinstPrev)
 			{
-				(void) InterlockedExchangePointer(
-					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev));
+				static_cast<void>(InterlockedExchangePointer(
+					reinterpret_cast<PVOID volatile*>(&g_hinstMAPI), static_cast<PVOID>(hinstPrev)));
 				hinstToFree = hinstMAPI;
 			}
 

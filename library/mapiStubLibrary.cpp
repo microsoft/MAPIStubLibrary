@@ -9,6 +9,14 @@
 #include <IMessage.h>
 #include <TNEF.h>
 
+// clang-format off
+#pragma warning(disable : 26426) // Warning C26426 Global initializer calls a non-constexpr (i.22)
+#pragma warning(disable : 26446) // Warning C26446 Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable : 26481) // Warning C26481 Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable : 26485) // Warning C26485 Expression '': No array to pointer decay (bounds.3).
+#pragma warning(disable : 26487) // Warning C26487 Don't return a pointer '' that may be invalid (lifetime.4).
+// clang-format on
+
 // Check that we have the Outlook 2010 MAPI headers or higher
 // We do this by checking for the presence of a macro not present in the older headers
 #ifndef MAPIFORM_CPU_X64
