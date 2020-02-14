@@ -346,7 +346,7 @@ namespace mapistub
 			if (pFGetCompPath)
 			{
 				CHAR lpszPath[MAX_PATH] = {0};
-				const ULONG cchPath = _countof(lpszPath);
+				const constexpr ULONG cchPath = _countof(lpszPath);
 
 				auto szComponentA = wstringTostring(szComponent);
 				auto szQualifierA = wstringTostring(szQualifier);
