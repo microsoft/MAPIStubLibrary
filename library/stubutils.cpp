@@ -483,7 +483,7 @@ namespace mapistub
 			nullptr,
 			&dwValueBuf);
 		LogError(L"GetOutlookPath: MsiProvideQualifiedComponent(x64)", hRes);
-		if (SUCCEEDED(hRes))
+		if (hRes == S_OK)
 		{
 			if (lpb64) *lpb64 = true;
 		}
@@ -498,7 +498,7 @@ namespace mapistub
 			LogError(L"GetOutlookPath: MsiProvideQualifiedComponent(x86)", hRes);
 		}
 
-		if (SUCCEEDED(hRes))
+		if (hRes == S_OK)
 		{
 			dwValueBuf += 1;
 			const auto lpszTempPath = std::wstring(dwValueBuf, '\0');
@@ -510,7 +510,7 @@ namespace mapistub
 				const_cast<wchar_t*>(lpszTempPath.c_str()),
 				&dwValueBuf);
 			LogError(L"GetOutlookPath: MsiProvideQualifiedComponent(x64)", hRes);
-			if (FAILED(hRes))
+			if (hRes != S_OK)
 			{
 				hRes = MyMsiProvideQualifiedComponent(
 					szCategory.c_str(),
@@ -521,7 +521,7 @@ namespace mapistub
 				LogError(L"GetOutlookPath: MsiProvideQualifiedComponent(x86)", hRes);
 			}
 
-			if (SUCCEEDED(hRes))
+			if (hRes == S_OK)
 			{
 				path = lpszTempPath;
 				logLoadMapi(L"Exit GetOutlookPath: Path = %ws\n", path.c_str());
