@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iterator>
 #include <MAPIX.h>
 #include <Msi.h>
 
