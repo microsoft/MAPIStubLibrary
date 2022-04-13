@@ -2,11 +2,18 @@
 #include <Windows.h>
 
 #include <MAPI.h>
+#include <MAPIX.h>
 #include <MAPIForm.h>
 #include <MAPIUtil.h>
 #include <MAPIVal.h>
 #include <MAPISPI.h>
 #include <IMessage.h>
+
+#ifdef WIN_NOEXCEPT
+#undef WIN_NOEXCEPT
+#define WIN_NOEXCEPT
+#endif
+
 #include <TNEF.h>
 
 // clang-format off
@@ -49,10 +56,6 @@ struct RTF_WCSRETINFO;
 #define LINKAGE_EXTERN_C extern "C"
 #define LINKAGE_NO_EXTERN_C /* */
 
-#ifndef WIN_NOEXCEPT
-#define WIN_NOEXCEPT
-#endif
-
 // Forward declares from stubutils.cpp
 namespace mapistub
 {
@@ -66,7 +69,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(void); \
 \
-	_linkage void _modifiers _name(void) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(void) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -87,7 +90,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(void); \
 \
-	_linkage void _modifiers _name(void) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(void) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -108,7 +111,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(void); \
 \
-	_linkage _ret_type _modifiers _name(void) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(void) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -133,7 +136,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(void); \
 \
-	_linkage _ret_type _modifiers _name(void) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(void) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -158,7 +161,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type); \
 \
-	_linkage void _modifiers _name(_param1_type a) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -179,7 +182,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type); \
 \
-	_linkage void _modifiers _name(_param1_type a) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -200,7 +203,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -225,7 +228,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -250,7 +253,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type, _param2_type); \
 \
-	_linkage void _modifiers _name(_param1_type a, _param2_type b) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a, _param2_type b) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -271,7 +274,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type, _param2_type); \
 \
-	_linkage void _modifiers _name(_param1_type a, _param2_type b) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a, _param2_type b) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -292,7 +295,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -318,7 +321,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -343,7 +346,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type, _param2_type, _param3_type); \
 \
-	_linkage void _modifiers _name(_param1_type a, _param2_type b, _param3_type c) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a, _param2_type b, _param3_type c) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -364,7 +367,7 @@ namespace mapistub
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type, _param2_type, _param3_type); \
 \
-	_linkage void _modifiers _name(_param1_type a, _param2_type b, _param3_type c) WIN_NOEXCEPT \
+	_linkage void _modifiers _name(_param1_type a, _param2_type b, _param3_type c) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -386,7 +389,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -412,7 +415,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -439,7 +442,7 @@ namespace mapistub
 	_linkage typedef void(_modifiers * _name##TYPE)(_param1_type, _param2_type, _param3_type, _param4_type); \
 \
 		_linkage void _modifiers \
-		_name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) WIN_NOEXCEPT \
+		_name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -461,7 +464,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type, _param4_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -496,7 +499,7 @@ namespace mapistub
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type, _param4_type); \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) WIN_NOEXCEPT \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c, _param4_type d) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -534,7 +537,7 @@ namespace mapistub
 		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type); \
 \
 	_linkage _ret_type _modifiers _name( \
-		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e) WIN_NOEXCEPT \
+		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -572,7 +575,7 @@ namespace mapistub
 		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type); \
 \
 	_linkage _ret_type _modifiers _name( \
-		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e) WIN_NOEXCEPT \
+		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -611,7 +614,7 @@ namespace mapistub
 		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type, _param6_type); \
 \
 	_linkage _ret_type _modifiers _name( \
-		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e, _param6_type f) WIN_NOEXCEPT \
+		_param1_type a, _param2_type b, _param3_type c, _param4_type d, _param5_type e, _param6_type f) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -655,7 +658,7 @@ namespace mapistub
 		_param4_type d, \
 		_param5_type e, \
 		_param6_type f, \
-		_param7_type g) WIN_NOEXCEPT \
+		_param7_type g) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -697,7 +700,7 @@ namespace mapistub
 		_param4_type d, \
 		_param5_type e, \
 		_param6_type f, \
-		_param7_type g) WIN_NOEXCEPT \
+		_param7_type g) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -752,7 +755,7 @@ namespace mapistub
 		_param5_type e, \
 		_param6_type f, \
 		_param7_type g, \
-		_param8_type h) WIN_NOEXCEPT \
+		_param8_type h) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -810,7 +813,7 @@ namespace mapistub
 		_param6_type f, \
 		_param7_type g, \
 		_param8_type h, \
-		_param9_type i) WIN_NOEXCEPT \
+		_param9_type i) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -871,7 +874,7 @@ namespace mapistub
 		_param7_type g, \
 		_param8_type h, \
 		_param9_type i, \
-		_param10_type j) WIN_NOEXCEPT \
+		_param10_type j) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -935,7 +938,7 @@ namespace mapistub
 		_param8_type h, \
 		_param9_type i, \
 		_param10_type j, \
-		_param11Type k) WIN_NOEXCEPT \
+		_param11Type k) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -1002,7 +1005,7 @@ namespace mapistub
 		_param9_type i, \
 		_param10_type j, \
 		_param11Type k, \
-		_param12Type l) WIN_NOEXCEPT \
+		_param12Type l) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -1067,7 +1070,7 @@ namespace mapistub
 		_param9_type i, \
 		_param10_type j, \
 		_param11Type k, \
-		_param11Type l) WIN_NOEXCEPT \
+		_param11Type l) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -1128,7 +1131,7 @@ namespace mapistub
 		_param9_type i, \
 		_param10_type j, \
 		_param11Type k, \
-		_param11Type l) WIN_NOEXCEPT \
+		_param11Type l) \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
