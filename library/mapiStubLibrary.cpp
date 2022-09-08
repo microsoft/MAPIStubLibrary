@@ -58,6 +58,8 @@ namespace mapistub
 	extern volatile ULONG g_ulDllSequenceNum;
 } // namespace mapistub
 
+#define DEFINE_STUB_FUNCTION_EMPTY_EXCEPTION_SPECIFIER
+
 #define DEFINE_STUB_FUNCTION_V0(_linkage, _modifiers, _name, _lookup) \
 \
 	_linkage typedef void(_modifiers * _name##TYPE)(void); \
@@ -377,12 +379,12 @@ namespace mapistub
 		} \
 	}
 
-#define DEFINE_STUB_FUNCTION_3( \
-	_linkage, _ret_type, _modifiers, _name, _lookup, _param1_type, _param2_type, _param3_type, _default) \
+#define DEFINE_STUB_FUNCTION_3_EXCEPT( \
+	_linkage, _ret_type, _modifiers, _name, _lookup, _param1_type, _param2_type, _param3_type, _default, _except) \
 \
-	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type); \
+	_linkage typedef _ret_type(_modifiers* _name##TYPE)(_param1_type, _param2_type, _param3_type) _except; \
 \
-	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) \
+	_linkage _ret_type _modifiers _name(_param1_type a, _param2_type b, _param3_type c) _except \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -402,6 +404,20 @@ namespace mapistub
 			return _default; \
 		} \
 	}
+
+#define DEFINE_STUB_FUNCTION_3( \
+	_linkage, _ret_type, _modifiers, _name, _lookup, _param1_type, _param2_type, _param3_type, _default) \
+    DEFINE_STUB_FUNCTION_3_EXCEPT( \
+		_linkage, \
+		_ret_type, \
+		_modifiers, \
+		_name, \
+		_lookup, \
+		_param1_type, \
+		_param2_type, \
+		_param3_type, \
+		_default, \
+		DEFINE_STUB_FUNCTION_EMPTY_EXCEPTION_SPECIFIER)
 
 #define DEFINE_STUB_FUNCTION_ORD_3( \
 	_linkage, _ret_type, _modifiers, _name, _ordinal, _param1_type, _param2_type, _param3_type, _default) \
@@ -639,7 +655,7 @@ namespace mapistub
 	_param4_type, \
 	_param5_type, \
 	_param6_type, \
-	_param7_type) \
+	_param7_type ) \
 \
 	_linkage typedef void(_modifiers * _name##TYPE)( \
 		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type, _param6_type, _param7_type); \
@@ -668,7 +684,7 @@ namespace mapistub
 		} \
 	}
 
-#define DEFINE_STUB_FUNCTION_7( \
+#define DEFINE_STUB_FUNCTION_7_EXCEPT( \
 	_linkage, \
 	_ret_type, \
 	_modifiers, \
@@ -681,10 +697,11 @@ namespace mapistub
 	_param5_type, \
 	_param6_type, \
 	_param7_type, \
-	_default) \
+	_default, \
+	_except ) \
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)( \
-		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type, _param6_type, _param7_type); \
+		_param1_type, _param2_type, _param3_type, _param4_type, _param5_type, _param6_type, _param7_type) _except; \
 \
 	_linkage _ret_type _modifiers _name( \
 		_param1_type a, \
@@ -693,7 +710,7 @@ namespace mapistub
 		_param4_type d, \
 		_param5_type e, \
 		_param6_type f, \
-		_param7_type g) \
+		_param7_type g) _except \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -714,7 +731,39 @@ namespace mapistub
 		} \
 	}
 
-#define DEFINE_STUB_FUNCTION_8( \
+
+#define DEFINE_STUB_FUNCTION_7( \
+	_linkage, \
+	_ret_type, \
+	_modifiers, \
+	_name, \
+	_lookup, \
+	_param1_type, \
+	_param2_type, \
+	_param3_type, \
+	_param4_type, \
+	_param5_type, \
+	_param6_type, \
+	_param7_type, \
+	_default) \
+    DEFINE_STUB_FUNCTION_7_EXCEPT( \
+		_linkage, \
+		_ret_type, \
+		_modifiers, \
+		_name, \
+		_lookup, \
+		_param1_type, \
+		_param2_type, \
+		_param3_type, \
+		_param4_type, \
+		_param5_type, \
+		_param6_type, \
+		_param7_type, \
+		_default, \
+        DEFINE_STUB_FUNCTION_EMPTY_EXCEPTION_SPECIFIER )
+
+
+#define DEFINE_STUB_FUNCTION_8_EXCEPT( \
 	_linkage, \
 	_ret_type, \
 	_modifiers, \
@@ -728,7 +777,8 @@ namespace mapistub
 	_param6_type, \
 	_param7_type, \
 	_param8_type, \
-	_default) \
+	_default, \
+	_except) \
 \
 	_linkage typedef _ret_type(_modifiers* _name##TYPE)( \
 		_param1_type, \
@@ -738,7 +788,7 @@ namespace mapistub
 		_param5_type, \
 		_param6_type, \
 		_param7_type, \
-		_param8_type); \
+		_param8_type) _except; \
 \
 	_linkage _ret_type _modifiers _name( \
 		_param1_type a, \
@@ -748,7 +798,7 @@ namespace mapistub
 		_param5_type e, \
 		_param6_type f, \
 		_param7_type g, \
-		_param8_type h) \
+		_param8_type h) _except \
 	{ \
 		static _name##TYPE _name##VAR = nullptr; \
 		static UINT ulDllSequenceNum = 0; \
@@ -768,6 +818,39 @@ namespace mapistub
 			return _default; \
 		} \
 	}
+
+
+#define DEFINE_STUB_FUNCTION_8( \
+	_linkage, \
+	_ret_type, \
+	_modifiers, \
+	_name, \
+	_lookup, \
+	_param1_type, \
+	_param2_type, \
+	_param3_type, \
+	_param4_type, \
+	_param5_type, \
+	_param6_type, \
+	_param7_type, \
+	_param8_type, \
+	_default) \
+	DEFINE_STUB_FUNCTION_8_EXCEPT( \
+		_linkage, \
+		_ret_type, \
+		_modifiers, \
+		_name, \
+		_lookup, \
+		_param1_type, \
+		_param2_type, \
+		_param3_type, \
+		_param4_type, \
+		_param5_type, \
+		_param6_type, \
+		_param7_type, \
+		_param8_type, \
+		_default, \
+		DEFINE_STUB_FUNCTION_EMPTY_EXCEPTION_SPECIFIER)
 
 #define DEFINE_STUB_FUNCTION_9( \
 	_linkage, \
@@ -1879,7 +1962,7 @@ DEFINE_STUB_FUNCTION_6(
 	MAPI_E_CALL_FAILED)
 
 #ifdef _INC_WINAPIFAMILY
-DEFINE_STUB_FUNCTION_7(
+DEFINE_STUB_FUNCTION_7_EXCEPT(
 	LINKAGE_EXTERN_C,
 	_Check_return_ HRESULT,
 	STDMETHODCALLTYPE,
@@ -1892,9 +1975,10 @@ DEFINE_STUB_FUNCTION_7(
 	LPMESSAGE,
 	WORD,
 	LPITNEF FAR*,
-	MAPI_E_CALL_FAILED)
+	MAPI_E_CALL_FAILED,
+	WIN_NOEXCEPT)
 
-DEFINE_STUB_FUNCTION_8(
+DEFINE_STUB_FUNCTION_8_EXCEPT(
 	LINKAGE_EXTERN_C,
 	_Check_return_ HRESULT,
 	STDMETHODCALLTYPE,
@@ -1908,7 +1992,8 @@ DEFINE_STUB_FUNCTION_8(
 	WORD,
 	LPADRBOOK,
 	LPITNEF FAR*,
-	MAPI_E_CALL_FAILED)
+	MAPI_E_CALL_FAILED,
+	WIN_NOEXCEPT)
 #else
 DEFINE_STUB_FUNCTION_7(
 	LINKAGE_EXTERN_C,
@@ -1942,7 +2027,7 @@ DEFINE_STUB_FUNCTION_8(
 	MAPI_E_CALL_FAILED)
 #endif
 
-DEFINE_STUB_FUNCTION_3(
+DEFINE_STUB_FUNCTION_3_EXCEPT(
 	LINKAGE_EXTERN_C,
 	HRESULT,
 	STDMETHODCALLTYPE,
@@ -1951,7 +2036,8 @@ DEFINE_STUB_FUNCTION_3(
 	LPSTREAM,
 	ULONG FAR*,
 	ULONG FAR*,
-	MAPI_E_CALL_FAILED)
+	MAPI_E_CALL_FAILED,
+	WIN_NOEXCEPT)
 
 DEFINE_STUB_FUNCTION_1(LINKAGE_EXTERN_C, ULONG, STDAPICALLTYPE, UlFromSzHex, ExpandFunction(UlFromSzHex, 4), LPCTSTR, 0)
 
