@@ -7,6 +7,12 @@
 #include <MAPIVal.h>
 #include <MAPISPI.h>
 #include <IMessage.h>
+
+ #ifdef WIN_NOEXCEPT
+ #undef WIN_NOEXCEPT
+ #define WIN_NOEXCEPT
+ #endif
+
 #include <TNEF.h>
 
 // clang-format off
