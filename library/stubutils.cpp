@@ -67,7 +67,7 @@ namespace mapistub
 		}
 	}
 
-	template <class T> void LogError(LPWSTR function, T error)
+	template <class T> void LogError(LPCWSTR function, T error)
 	{
 		if (error) logLoadMapi(L"%ws failed with 0x%08X\n", function, error);
 	}
