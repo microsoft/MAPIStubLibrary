@@ -1,18 +1,22 @@
 #define _WINSOCKAPI_
 #include <Windows.h>
 
+#ifdef WIN_NOEXCEPT
+#undef WIN_NOEXCEPT
+#define WIN_NOEXCEPT
+#endif
+
+#ifdef WIN_NOEXCEPT_PFN
+#undef WIN_NOEXCEPT_PFN
+#define WIN_NOEXCEPT_PFN
+#endif
+
 #include <MAPI.h>
 #include <MAPIForm.h>
 #include <MAPIUtil.h>
 #include <MAPIVal.h>
 #include <MAPISPI.h>
 #include <IMessage.h>
-
- #ifdef WIN_NOEXCEPT
- #undef WIN_NOEXCEPT
- #define WIN_NOEXCEPT
- #endif
-
 #include <TNEF.h>
 
 // clang-format off
@@ -37,7 +41,7 @@
 #error Outlook 2010 MAPI headers or higher must be installed
 #endif
 
-#if defined(_M_X64) || defined(_M_ARM)
+#if defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64)
 #define ExpandFunction(fn, c) #fn
 #elif defined(_M_IX86)
 #define ExpandFunction(fn, c) #fn "@" #c

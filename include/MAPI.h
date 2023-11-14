@@ -16,7 +16,7 @@
 #ifndef MAPI_H
 #define MAPI_H
 
-#if _MSC_VER > 1000
+#if (_MSC_VER > 1000) || __clang__
 #pragma once
 #endif
 
@@ -31,22 +31,32 @@ extern "C" {
 
 
 #ifndef EXPORT
-#if defined(_WIN64) || defined (_WIN32)
-#define EXPORT
+#if defined(_WIN64) || defined (_WIN32) || defined (_M_ARM)
+#define EXPORT 
 #else
 #error	"Unknown Platform: MAPI is currently supported on Win32 and Win64"
 #endif
 #endif
 
-typedef unsigned long FAR * LPULONG;
-typedef unsigned long       FLAGS;
+#if !defined(_LPULONG_DEFINED) //+MS_TARGET_APPLE
+#define _LPULONG_DEFINED
+typedef ULONG FAR * LPULONG;
+#endif //_LPULONG_DEFINED
+
+#if !defined(_FLAGS_DEFINED) //+MS_TARGET_APPLE
+#define _FLAGS_DEFINED
+typedef ULONG FLAGS;
+#endif //_FLAGS_DEFINED
 
 #ifndef __LHANDLE
 #define __LHANDLE
 typedef ULONG_PTR       LHANDLE, FAR * LPLHANDLE;
 #endif
 
+#if !defined(_LPBYTE_DEFINED) //+MS_TARGET_APPLE
+#define _LPBYTE_DEFINED
 typedef unsigned char FAR * LPBYTE;
+#endif //_LPBYTE_DEFINED
 
 #define    lhSessionNull    ((LHANDLE)0)
 
@@ -267,7 +277,10 @@ typedef ULONG (FAR PASCAL MAPIDELETEMAIL)(
 typedef MAPIDELETEMAIL FAR *LPMAPIDELETEMAIL;
 MAPIDELETEMAIL MAPIDeleteMail;
 
+#if !defined(_LPMAPIFREEBUFFER_DEFINED) //+MS_TARGET_APPLE
+#define _LPMAPIFREEBUFFER_DEFINED
 typedef ULONG (EXPORT FAR PASCAL *LPMAPIFREEBUFFER)(LPVOID pv);
+#endif //_LPMAPIFREEBUFFER_DEFINED
 
 ULONG FAR PASCAL MAPIFreeBuffer(LPVOID pv);
 
