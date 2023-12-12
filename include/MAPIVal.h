@@ -210,7 +210,7 @@ typedef enum _tagMethods
 
 
 /* Macro wrappers to hide the Validate function return handling */
-#if defined(_AMD64_) || defined(_X86_) || defined(_M_ARM)
+#if defined(_AMD64_) || defined(_X86_) || defined(_M_ARM) || defined(_M_ARM64)
 #ifdef __cplusplus
 
 /* C++ methods can't take the address of the This pointer, so we must
@@ -255,7 +255,7 @@ typedef enum _tagMethods
 #endif /* __cplusplus */
 #else
 #error	"Unknown Platform: MAPI is currently supported on X86 and AMD64 and ARM"
-#endif /* _X86_ || _AMD64_ || _M_ARM */
+#endif /* _X86_ || _AMD64_ || _M_ARM || _M_ARM64 */
 
 /* Prototypes for functions used to validate complex parameters.
  */
@@ -527,7 +527,7 @@ __ValidateParameters(METHODS eMethod, LPVOID ppThis);
 
 /* Macro wrappers for platform independent validation */
 
-#if defined(_AMD64_) || defined(_X86_) || defined (_M_ARM)
+#if defined(_AMD64_) || defined(_X86_) || defined (_M_ARM) || defined(_M_ARM64)
 
 #define ArgShiftN (1 + (sizeof(DWORD_PTR)>>2))
 #define ArgSize(T) ((sizeof(T)+sizeof(DWORD_PTR)-1)>>ArgShiftN)
@@ -819,7 +819,7 @@ __ValidateParameters(METHODS eMethod, LPVOID ppThis);
 #define CheckParameters15( m, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 )
 #define CheckParameters16( m, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 )
 #endif /* DEBUG */
-#else /* !_AMD64_ && !_X86_  && !_M_ARM */
+#else /* !_AMD64_ && !_X86_  && !_M_ARM  && !_M_ARM64 */
 #define ValidateParms(x)	{ HRESULT _hr_ = HrValidateParametersV x; if (HR_FAILED(_hr_)) return (_hr_); }
 #define UlValidateParms(x)	{ HRESULT _hr_ = HrValidateParametersV x; if (HR_FAILED(_hr_)) return (ULONG)(_hr_); }
 #define CheckParms(x) 		AssertSz(HR_SUCCEEDED( HrValidateParametersV x ), "Parameter validation failed for method called by MAPI!")
@@ -1953,7 +1953,7 @@ __ValidateParameters(METHODS eMethod, LPVOID ppThis);
 #define CheckParameters_IMAPIAdviseSink_OnNotify( a1, a2, a3 ) \
 			 CheckParameters3( IMAPIAdviseSink_OnNotify, a1, a2, a3 )
 
-#if defined (_AMD64_) || defined(_X86_) || defined (_M_ARM)
+#if defined (_AMD64_) || defined(_X86_) || defined (_M_ARM) || defined(_M_ARM64)
 STDAPI	HrValidateParameters( METHODS eMethod, LPVOID FAR *ppFirstArg );
 #else
 #error	"Unknown Platform: MAPI is currently supported on Win32 and Win64"
