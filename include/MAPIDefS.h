@@ -1135,6 +1135,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIProp, IUnknown)
 #define TABLE_SORT_DESCEND		((ULONG) 0x00000001)
 #define TABLE_SORT_COMBINE		((ULONG) 0x00000002)
 
+// Documented here: https://learn.microsoft.com/en-us/office/client-developer/outlook/mapi/ssortorder
+#define TABLE_SORT_CATEG_MAX	((ULONG) 0x00000004)
+#define TABLE_SORT_CATEG_MIN	((ULONG) 0x00000008)
 
 /* Data structures */
 
