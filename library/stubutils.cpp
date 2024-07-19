@@ -80,7 +80,7 @@ namespace mapistub
 		do
 		{
 			path.resize(path.size() + MAX_PATH);
-			copied = ::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), static_cast<UINT>(path.size()));
+			copied =::GetSystemDirectoryW(const_cast<LPWSTR>(path.data()), static_cast<UINT>(path.size()));
 			if (!copied)
 			{
 				const auto dwErr = GetLastError();
