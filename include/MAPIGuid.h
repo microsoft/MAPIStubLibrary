@@ -323,7 +323,7 @@ DEFINE_GUID(SETID_AirSync, 0x71035549, 0x0739, 0x4DCB, 0x91, 0x63, 0, 0xF0, 0x58
 DEFINE_OLEGUID(PSETID_Task, 0x00062003, 0, 0);
 #endif
 
-/*  Sync related properties */
+/*  Unified messaging related properties */
 #if !defined(INITGUID) || defined(USES_PSETID_UnifiedMessaging)
 DEFINE_GUID(PSETID_UnifiedMessaging, 0x4442858E, 0xA9E3, 0x4E80, 0xB9, 0, 0x31, 0x7A, 0x21, 0x0C, 0xC1, 0x5B);
 #endif
