@@ -249,6 +249,86 @@ DEFINE_OLEGUID(PS_PUBLIC_STRINGS,	0x00020329, 0, 0);
 #endif
 
 
+/*
+ * Additional well known guids for name<->id mappings:
+ * https://learn.microsoft.com/en-us/office/client-developer/outlook/mapi/commonly-used-property-sets
+ */
+
+/*  Calendar related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Appointment)
+DEFINE_OLEGUID(PSETID_Appointment, 0x00062002, 0, 0);
+#endif
+
+#if !defined(INITGUID) || defined(USES_PSETID_Meeting)
+DEFINE_GUID(PSETID_Meeting, 0x6ED8DA90, 0x450B, 0x101B, 0x98, 0xDA, 0, 0xAA, 0, 0x3F, 0x13, 0x05);
+#endif
+
+/*  Common properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Common)
+DEFINE_OLEGUID(PSETID_Common, 0x00062008, 0, 0);
+#endif
+
+/*  Contact related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Address)
+DEFINE_OLEGUID(PSETID_Address, 0x00062004, 0, 0);
+#endif
+
+/*  Email related properties */
+#if !defined(INITGUID) || defined(USES_PS_INTERNET_HEADERS)
+DEFINE_OLEGUID(PS_INTERNET_HEADERS, 0x00020386, 0, 0);
+#endif
+
+/*  General messaging related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Report)
+DEFINE_OLEGUID(PSETID_Report, 0x00062013, 0, 0);
+#endif
+
+/*  Journal related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Log)
+DEFINE_OLEGUID(PSETID_Log, 0x0006200A, 0, 0);
+#endif
+
+/*  Messaging related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Messaging)
+DEFINE_GUID(PSETID_Messaging, 0x41F28F13, 0x83F4, 0x4114, 0xA5, 0x84, 0xEE, 0xDB, 0x5A, 0x6B, 0x0B, 0xFF);
+#endif
+
+/*  Remote messaging related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Remote)
+DEFINE_OLEGUID(PSETID_Remote, 0x00062014, 0, 0);
+#endif
+
+/*  RSS feed related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_PostRss)
+DEFINE_OLEGUID(PSETID_PostRss, 0x00062041, 0, 0);
+#endif
+
+/*  Sharing related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Sharing)
+DEFINE_OLEGUID(PSETID_Sharing, 0x00062040, 0, 0);
+#endif
+
+/*  Sticky note related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Note)
+DEFINE_OLEGUID(PSETID_Note, 0x0006200E, 0, 0);
+#endif
+
+/*  Sync related properties */
+#if !defined(INITGUID) || defined(USES_SETID_AirSync)
+DEFINE_GUID(SETID_AirSync, 0x71035549, 0x0739, 0x4DCB, 0x91, 0x63, 0, 0xF0, 0x58, 0x0D, 0xBB, 0xDF);
+#endif
+
+/*  Task related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Task)
+DEFINE_OLEGUID(PSETID_Task, 0x00062003, 0, 0);
+#endif
+
+/*  Sync related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_UnifiedMessaging)
+DEFINE_GUID(PSETID_UnifiedMessaging, 0x4442858E, 0xA9E3, 0x4E80, 0xB9, 0, 0x31, 0x7A, 0x21, 0x0C, 0xC1, 0x5B);
+#endif
+
+
 
 
 /* MAPI forms, form manager, (cont) */
