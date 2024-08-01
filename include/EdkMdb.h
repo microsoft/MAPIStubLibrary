@@ -607,11 +607,6 @@
 // Reusing mailbox table property
 #define PR_CONVERSION_STATE				PROP_TAG(PT_LONG,	PROP_ID(ptagAdminNickName))
 
-// Property to represent native html content - assumed to be in the internet
-// codepage as determined by PR_INTERNET_CPID
-//
-#define PR_HTML                        PROP_TAG( PT_BINARY,	PROP_ID( PR_BODY_HTML ) )
-
 // computed property used for moderated folder rule
 // its an EntryId whose value is:
 // ptagSenderEntryId on delivery
