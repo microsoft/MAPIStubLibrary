@@ -236,6 +236,7 @@
 #define	PR_CONVERSATION_TOPIC						PROP_TAG( PT_TSTRING,	0x0070)
 #define	PR_CONVERSATION_TOPIC_W						PROP_TAG( PT_UNICODE,	0x0070)
 #define	PR_CONVERSATION_TOPIC_A						PROP_TAG( PT_STRING8,	0x0070)
+#define	PR_CONVERSATION_ID							PROP_TAG( PT_BINARY,	0x3013)
 #define	PR_CONVERSATION_INDEX						PROP_TAG( PT_BINARY,	0x0071)
 
 #define PR_ORIGINAL_DISPLAY_BCC						PROP_TAG( PT_TSTRING,	0x0072)
@@ -311,6 +312,14 @@
 #define PR_RTF_SYNC_PREFIX_COUNT					PROP_TAG( PT_LONG,		0x1010)
 #define PR_RTF_SYNC_TRAILING_COUNT					PROP_TAG( PT_LONG,		0x1011)
 #define PR_ORIGINALLY_INTENDED_RECIP_ENTRYID		PROP_TAG( PT_BINARY,	0x1012)
+
+#define PR_HTML										PROP_TAG( PT_BINARY,	0x1013)
+#define PR_NATIVE_BODY_INFO							PROP_TAG( PT_LONG,		0x1016)
+#define PR_INTERNET_MESSAGE_ID_W					PROP_TAG( PT_UNICODE,	0x1035)
+#define PR_INTERNET_REFERENCES_W					PROP_TAG( PT_UNICODE,	0x1039)
+#define PR_IN_REPLY_TO_W							PROP_TAG( PT_UNICODE,	0x1042)
+#define PR_ICON_INDEX								PROP_TAG( PT_LONG,		0x1080)
+#define PR_FLAG_STATUS								PROP_TAG( PT_LONG,		0x1090)
 
 /*
  *  Reserved 0x1100-0x1200
@@ -558,6 +567,11 @@
 
 /* Proptags 0x35E8-0x35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
 
+/*
+ *	Additional well-known folder ID properties
+ */
+#define PR_IPM_ARCHIVE_ENTRYID						PROP_TAG( PT_BINARY,	0x35FF)
+
 
 /*
  *	Folder and AB Container properties
@@ -589,6 +603,17 @@
 #define PR_AB_PROVIDER_ID							PROP_TAG( PT_BINARY,	0x3615)
 #define PR_DEFAULT_VIEW_ENTRYID						PROP_TAG( PT_BINARY,	0x3616)
 #define	PR_ASSOC_CONTENT_COUNT						PROP_TAG( PT_LONG,		0x3617)
+
+
+/*
+ *	Additional well-known folder ID properties
+ *	https://learn.microsoft.com/en-us/office/client-developer/outlook/mapi/opening-a-message-store-folder
+ */
+#define PR_IPM_APPOINTMENT_ENTRYID					PROP_TAG( PT_BINARY,	0x36D0)
+#define PR_IPM_CONTACT_ENTRYID						PROP_TAG( PT_BINARY,	0x36D1)
+#define PR_IPM_TASK_ENTRYID							PROP_TAG( PT_BINARY,	0x36D4)
+#define PR_IPM_DRAFTS_ENTRYID						PROP_TAG( PT_BINARY,	0x36D7)
+
 
 /* Reserved 0x36C0-0x36FF */
 
