@@ -328,6 +328,21 @@ DEFINE_OLEGUID(PSETID_Task, 0x00062003, 0, 0);
 DEFINE_GUID(PSETID_UnifiedMessaging, 0x4442858E, 0xA9E3, 0x4E80, 0xB9, 0, 0x31, 0x7A, 0x21, 0x0C, 0xC1, 0x5B);
 #endif
 
+/*
+ * Additional well known guids for name<->id mappings:
+ * https://learn.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxprops/cc9d955b-1492-47de-9dce-5bdea80a3323
+ */
+
+/*  Extracted entities related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_XmlExtractedEntities)
+DEFINE_GUID(PSETID_XmlExtractedEntities, 0x23239608, 0x685D, 0x4732, 0x9C, 0x55, 0x4C, 0x95, 0xCB, 0x4E, 0x8E, 0x33);
+#endif
+
+/*  Attachment related properties */
+#if !defined(INITGUID) || defined(USES_PSETID_Attachment)
+DEFINE_GUID(PSETID_Attachment, 0x96357F7F, 0x59E1, 0x47D0, 0x99, 0xA7, 0x46, 0x51, 0x5C, 0x18, 0x3B, 0x54);
+#endif
+
 
 
 
