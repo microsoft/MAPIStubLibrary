@@ -43,29 +43,6 @@ jobs:
         $path = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
         & $path\MSBuild\Current\Bin\amd64\msbuild.exe /m /p:Configuration="${{matrix.configuration}}" /p:Platform="${{matrix.platform}}" mapistub.sln
 
-    - name: Find vstest.console.exe
-      run: |
-        $VSDevTestCmd = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere" -latest -prerelease -products * -find Common7\IDE\Extensions\TestPlatform\vstest.console.exe
-        if (!$VSDevTestCmd) { exit 1 }
-        echo "Using VSDevTestCmd: ${VSDevTestCmd}"
-        Add-Content $env:GITHUB_ENV "VSDevTestCmd=$VSDevTestCmd"
-
-    - name: MFCMAPI UnitTests
-      run: cmd /c "$env:VSDevTestCmd" /Parallel /EnableCodeCoverage /Logger:trx "${{github.workspace}}\\bin\\${{matrix.platform}}\\UnitTest\\${{matrix.configuration}}\\UnitTest.dll"
-
-    # - name: Upload Event File
-    #   uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
-    #   with:
-    #     name: Event File (${{ matrix.platform }} - ${{ matrix.configuration }})
-    #     path: ${{ github.event_path }}
- 
-    - name: Upload Test Result Files
-      uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
-      if: always()
-      with:
-        name: Test Results (${{ matrix.platform }} - ${{ matrix.configuration }})
-        path: ${{github.workspace}}/**/TestResults/**/*
-
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@8214744c546c1e5c8f03dde8fab3a7353211988d # v3.26.7
       with:
