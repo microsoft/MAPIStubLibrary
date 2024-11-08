@@ -7,4 +7,5 @@
 /obj
 /packages
 /build
+/node_modules
 vc140.pdb
