@@ -23,4 +23,5 @@ jobs:
       uses: jidicula/clang-format-action@c74383674bf5f7c69f60ce562019c1c94bc1421a # v4.13.0
       with:
         clang-format-version: '17'
+        exclude-regex: 'include/*'
         fallback-style: 'Microsoft'
