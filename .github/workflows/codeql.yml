@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '33 1 * * 2'
+    - cron: '33 1 * * 2' # Run at 1:33 on Tuesdays
 
 jobs:
   analyze:
@@ -54,8 +54,8 @@ jobs:
           # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
           # queries: security-extended,security-and-quality
 
-      # - name: Autobuild
-      #   uses: github/codeql-action/autobuild@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
 
       - name: Perform CodeQL Analysis
         id: analyze
