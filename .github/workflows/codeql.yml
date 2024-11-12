@@ -58,6 +58,12 @@ jobs:
       #   uses: github/codeql-action/autobuild@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
 
       - name: Perform CodeQL Analysis
+        id: analyze
         uses: github/codeql-action/analyze@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
         with:
           category: "/language:${{matrix.language}}"
+
+      - name: CodeQLSARIF
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          path: ${{ steps.analyze.outputs.sarif-output }}
