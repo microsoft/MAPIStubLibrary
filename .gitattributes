@@ -1,0 +1,2 @@
+binding.gyp -linguist-detectable
+scripts/** -linguist-detectable
