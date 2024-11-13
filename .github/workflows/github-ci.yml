@@ -32,28 +32,11 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@396bb3e45325a47dd9ef434068033c6d5bb0d11a # v3.27.3
-      with:
-        languages: "cpp"
-
     - name: "Build"
       shell: pwsh
       run: |
         $path = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
         & $path\MSBuild\Current\Bin\amd64\msbuild.exe /m /p:Configuration="${{matrix.configuration}}" /p:Platform="${{matrix.platform}}" mapistub.sln
-
-    - name: Perform CodeQL Analysis
-      id: analyze
-      uses: github/codeql-action/analyze@396bb3e45325a47dd9ef434068033c6d5bb0d11a # v3.27.3
-      with:
-        category: "/language:cpp"
-
-    - name: Upload CodeQL Analysis Results
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-      with:
-        name: codeql-results-${{ matrix.configuration }}-${{ matrix.platform }}
-        path: ${{ steps.analyze.outputs.sarif-output }}
 
   publish-test-results:
     name: "Publish Tests Results"
