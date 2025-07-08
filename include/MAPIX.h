@@ -50,6 +50,7 @@ typedef ULONG       FLAGS;
 
 #define MAPI_LOGON_UI           0x00000001  /* Display logon UI					*/
 #define MAPI_NEW_SESSION        0x00000002  /* Don't use shared session			*/
+#define MAPI_APP_PROFILE        0x00000004  /* Interact with app profiles		*/
 #define MAPI_ALLOW_OTHERS       0x00000008  /* Make this a shared session		*/
 #define MAPI_EXPLICIT_PROFILE   0x00000010  /* Don't use default profile		*/
 #define MAPI_EXTENDED           0x00000020  /* Extended MAPI Logon				*/
