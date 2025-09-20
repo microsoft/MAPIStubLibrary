@@ -847,6 +847,17 @@ STDAPI_(SCODE)			ScInitMapiUtil(ULONG ulFlags);
 STDAPI_(VOID)			DeinitMapiUtil(VOID);
 
 
+STDAPI_(HRESULT) OpenStreamOnFileW(LPALLOCATEBUFFER lpAllocateBuffer, LPFREEBUFFER lpFreeBuffer,
+	ULONG ulFlags, LPWSTR lpszFileName, LPWSTR lpszPrefix, LPSTREAM FAR* lppStream);
+
+STDAPI_(HRESULT) WrapCompressedRTFStreamEx(LPSTREAM pCompressedRTFStream, const RTF_WCSINFO* pWCSInfo,
+	LPSTREAM* ppUncompressedRTFStream, RTF_WCSRETINFO* pRetInfo);
+
+#define MAPI_NATIVE_BODY 0x00010000
+#define pidExchangeXmitReservedMin 0x3FE0
+#define PR_INTERNET_CPID PROP_TAG(PT_LONG, pidExchangeXmitReservedMin - 0x02)
+
+
 /*
  *	Entry point names.
  *	
