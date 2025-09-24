@@ -113,7 +113,10 @@ namespace mapistub
 		L"powerpnt.exe",
 		L"msaccess.exe",
 		L"onenote.exe",
-		L"mspub.exe"};
+		L"mspub.exe",
+		L"visio.exe",
+		L"mspub.exe"
+	};
 
 	std::wstring GetInstalledOutlookMAPI(int iOutlook);
 	std::wstring GetInstalledOutlookMAPI(const std::wstring component);
