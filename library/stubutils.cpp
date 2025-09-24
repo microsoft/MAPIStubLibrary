@@ -115,8 +115,7 @@ namespace mapistub
 		L"onenote.exe",
 		L"mspub.exe",
 		L"visio.exe",
-		L"mspub.exe"
-	};
+		L"mspub.exe"};
 
 	std::wstring GetInstalledOutlookMAPI(int iOutlook);
 	std::wstring GetInstalledOutlookMAPI(const std::wstring component);
@@ -661,7 +660,7 @@ namespace mapistub
 				std::transform(lower.begin(), lower.end(), lower.begin(), ::towlower);
 				return lower.find(L"olmapi32.dll") != std::wstring::npos;
 			};
-			auto it = std::stable_partition(paths.begin(), paths.end(), is_olmapi32);
+			static_cast<void>(std::stable_partition(paths.begin(), paths.end(), is_olmapi32));
 		}
 
 		return paths;
