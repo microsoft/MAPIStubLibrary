@@ -846,30 +846,44 @@ HrIStorageFromStream (LPUNKNOWN lpUnkIn,
 STDAPI_(SCODE)			ScInitMapiUtil(ULONG ulFlags);
 STDAPI_(VOID)			DeinitMapiUtil(VOID);
 
+// Definitions for WrapCompressedRTFStreamEx in param for WrapCompressedRTFStreamEX
+// https://learn.microsoft.com/en-us/previous-versions/office/developer/office-2007/bb905293(v=office.12)
 struct RTF_WCSINFO
 {
-	ULONG size;
+	ULONG size; // Size of the structure
 	ULONG ulFlags;
-	ULONG ulInCodePage;
-	ULONG ulOutCodePage;
+	/****** MAPI_MODIFY ((ULONG) 0x00000001) above */
+	/****** STORE_UNCOMPRESSED_RTF ((ULONG) 0x00008000) above */
+	/****** MAPI_NATIVE_BODY ((ULONG) 0x00010000) mapidefs.h Only used for reading*/
+	ULONG ulInCodePage; // Codepage of the message, used when passing MAPI_NATIVE_BODY, ignored otherwise
+	ULONG ulOutCodePage; // Codepage of the Returned Stream, used when passing MAPI_NATIVE_BODY, ignored otherwise
 };
 
+// out param type information for WrapCompressedRTFStreamEX
+// https://learn.microsoft.com/en-us/previous-versions/office/developer/office-2007/bb905294(v=office.12)
 struct RTF_WCSRETINFO
 {
-	ULONG size;
+	ULONG size; // Size of the structure
 	ULONG ulStreamFlags;
+	/****** MAPI_NATIVE_BODY_TYPE_RTF ((ULONG) 0x00000001) mapidefs.h */
+	/****** MAPI_NATIVE_BODY_TYPE_HTML ((ULONG) 0x00000002) mapidefs.h */
+	/****** MAPI_NATIVE_BODY_TYPE_PLAINTEXT ((ULONG) 0x00000004) mapidefs.h */
 };
 
-// Declaration missing from headers
-STDAPI_(HRESULT) OpenStreamOnFileW(LPALLOCATEBUFFER lpAllocateBuffer, LPFREEBUFFER lpFreeBuffer,
-	ULONG ulFlags, LPWSTR lpszFileName, LPWSTR lpszPrefix, LPSTREAM FAR* lppStream);
+STDAPI_(HRESULT)
+WrapCompressedRTFStreamEx(
+	LPSTREAM pCompressedRTFStream,
+	const RTF_WCSINFO* pWCSInfo,
+	LPSTREAM* ppUncompressedRTFStream,
+	RTF_WCSRETINFO* pRetInfo);
 
-STDAPI_(HRESULT) WrapCompressedRTFStreamEx(LPSTREAM pCompressedRTFStream, const RTF_WCSINFO* pWCSInfo,
-	LPSTREAM* ppUncompressedRTFStream, RTF_WCSRETINFO* pRetInfo);
-
-#define MAPI_NATIVE_BODY 0x00010000
-#define pidExchangeXmitReservedMin 0x3FE0
-#define PR_INTERNET_CPID PROP_TAG(PT_LONG, pidExchangeXmitReservedMin - 0x02)
+_Check_return_ STDAPI OpenStreamOnFileW(
+	_In_ LPALLOCATEBUFFER lpAllocateBuffer,
+	_In_ LPFREEBUFFER lpFreeBuffer,
+	ULONG ulFlags,
+	_In_z_ LPCWSTR lpszFileName,
+	_In_opt_z_ LPCWSTR lpszPrefix,
+	_Out_ LPSTREAM FAR* lppStream);
 
 /*
  *	Entry point names.
