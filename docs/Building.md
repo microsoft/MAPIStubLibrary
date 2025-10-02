@@ -49,8 +49,24 @@ Alternatively, you can build using Node.js and node-gyp (this creates a static l
 
 3. **Build**:
 
+   **Default build (matches your Node.js architecture):**
+
    ```bash
    npm run build
+   ```
+
+   **Architecture-specific builds:**
+
+   ```bash
+   npm run build:x64    # 64-bit library
+   npm run build:x86    # 32-bit library  
+   npm run build:arm64  # ARM64 library
+   ```
+
+   **Clean build artifacts:**
+
+   ```bash
+   npm run clean
    ```
 
 The output will be `MAPIStubLibrary.lib` in the `build/Release` directory.
