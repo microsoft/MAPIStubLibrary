@@ -23,7 +23,8 @@
       "defines": [
         "WIN32_LEAN_AND_MEAN",
         "NOMINMAX"
-      ]
+      ],
+      "product_dir": "lib/<(target_arch)"
     }
   ]
 }
