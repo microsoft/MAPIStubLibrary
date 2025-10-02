@@ -4,7 +4,7 @@
 #include <string>
 
 // stubutils.h - Optional header to enable clients to reuse stubutils code
-// Not reuqired to build the mapistub library
+// Not required to build the mapistub library
 
 namespace mapistub
 {

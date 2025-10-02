@@ -23,7 +23,7 @@
 - [The MAPI Stub Library doesn't export the function X. Can I add it?](#the-mapi-stub-library-doesnt-export-the-function-x-can-i-add-it)
 - [The MAPI Stub Library exports the function X incorrectly. Can I fix it?](#the-mapi-stub-library-exports-the-function-x-incorrectly-can-i-fix-it)
 
-**Didn't find what you're looking for here? Start a thread on the [discussion board](https://github.com/stephenegriffin/MAPIStubLibrary/discussions).**
+**Didn't find what you're looking for here? Start a thread on the [discussion board](https://github.com/microsoft/MAPIStubLibrary/discussions).**
 
 ## Why would I use this library?
 
@@ -74,16 +74,16 @@ By providing full source and build projects for this library, we're giving compl
 
 ## I use a compiler other than Visual Studio, or a different version of Visual Studio than one of the provided projects. What can I do?
 
-You should still be able to use the provided source. You'll just have to build your own project or directly include the source in your existing project. Feel free to share your experiences in the [Discussions](https://github.com/stephenegriffin/MAPIStubLibrary/discussions).
+You should still be able to use the provided source. You'll just have to build your own project or directly include the source in your existing project. Feel free to share your experiences in the [Discussions](https://github.com/microsoft/MAPIStubLibrary/discussions).
 
 ## I don't like the way the library does X. Can I change it?
 
-Of course. Do whatever you like to the code. If you find bugs you wish to report, please visit the [Issues](https://github.com/stephenegriffin/MAPIStubLibrary/issues) page.
+Of course. Do whatever you like to the code. If you find bugs you wish to report, please visit the [Issues](https://github.com/microsoft/MAPIStubLibrary/issues) page.
 
 ## The MAPI Stub Library doesn't export the function X. Can I add it?
 
-Yes. There are plenty of examples in MapiStubLibrary.cpp of how to export a function. If the function is one we've documented, please file a "Missing Export" bug under Issues so we can consider adding it for everyone.
+Yes. There are plenty of examples in [`MapiStubLibrary.cpp`](../library/mapiStubLibrary.cpp) of how to export a function. If the function is one we've documented, please file a "Missing Export" bug under Issues so we can consider adding it for everyone.
 
 ## The MAPI Stub Library exports the function X incorrectly. Can I fix it?
 
-Yes. You can correct the export in MapiStubLibrary.cpp. Please also file an "Incorrect Export" bug under Issues so we can consider fixing it for everyone.
+Yes. You can correct the export in [`MapiStubLibrary.cpp`](../library/mapiStubLibrary.cpp). Please also file an "Incorrect Export" bug under Issues so we can consider fixing it for everyone.

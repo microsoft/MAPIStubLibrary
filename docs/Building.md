@@ -9,12 +9,12 @@ You have two options to get the source code:
 1. **Clone the repository (recommended)**:
 
    ```bash
-   git clone https://github.com/stephenegriffin/MAPIStubLibrary.git
+   git clone https://github.com/microsoft/MAPIStubLibrary.git
    cd MAPIStubLibrary
    ```
 
 2. **Download as ZIP**:
-   Download the [latest source](https://github.com/stephenegriffin/MAPIStubLibrary/archive/refs/heads/main.zip) and extract it to a local directory.
+   Download the [latest source](https://github.com/microsoft/MAPIStubLibrary/archive/refs/heads/main.zip) and extract it to a local directory.
 
 ## Building with Visual Studio
 
