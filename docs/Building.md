@@ -2,18 +2,64 @@
 
 To build the MAPI Stub Library as MAPIStubLibrary.lib, do the following:
 
-1. Download and unzip the [source](https://github.com/stephenegriffin/MAPIStubLibrary).
+## Getting the Source
 
-2. Download and install the [Outlook 2010 MAPI Header Files](http://www.microsoft.com/downloads/en/details.aspx?FamilyID=f8d01fc8-f7b5-4228-baa3-817488a66db1&displaylang=en).
+You have two options to get the source code:
 
-3. Open the project for the MAPI Stub Library matching the version of Visual Studio you have. We provide project files for Visual Studio 2008 and Visual Studio 2010.
-   - **Visual Studio 2008**: The project file is located in the vs2008 directory. After opening it, go to Tools>Options>Projects and Solutions>>VC++ Directories, and add the directory for the Outlook 2010 MAPI headers prior to the Visual Studio include directories.
-   - **Visual Studio 2010**: The project file is located in the vs2010 directory. After opening it, right click on the MapiStubLibrary project and select Properties. Switch to the Configuration Properties>VC++ Directories node and add the directory for the Outlook 2010 MAPI headers prior to the Visual Studio include directories.
+1. **Clone the repository (recommended)**:
 
-4. From the Release Configuration drop down, select Release, unless you're building a library for debugging purposes.
+   ```bash
+   git clone https://github.com/stephenegriffin/MAPIStubLibrary.git
+   cd MAPIStubLibrary
+   ```
 
-5. From the Solution Platforms drop down, select Win32 or x64, depending on the flavor you need for your application.
+2. **Download as ZIP**:
+   Download the [latest source](https://github.com/stephenegriffin/MAPIStubLibrary/archive/refs/heads/main.zip) and extract it to a local directory.
 
-6. Build the project.
+## Building with Visual Studio
 
-You now have a file, MAPIStubLibrary.lib, which you can link in to your project.
+The project includes all necessary MAPI headers in the `include` directory, so no additional downloads are required.
+
+1. **Open the solution**: Open `mapistub.sln` in Visual Studio (2019 or later recommended).
+
+2. **Select configuration**: From the Solution Configuration dropdown, select:
+   - `Release` for production builds
+   - `Debug` for debugging purposes
+
+3. **Select platform**: From the Solution Platform dropdown, select:
+   - `x64` for 64-bit applications (recommended)
+   - `Win32` for 32-bit applications
+   - `ARM64` for ARM64 applications
+
+4. **Build**: Press `Ctrl+Shift+B` or go to Build → Build Solution.
+
+You now have a file, `MAPIStubLibrary.lib`, which you can link in to your project.
+
+## Building with Node.js/node-gyp
+
+Alternatively, you can build using Node.js and node-gyp:
+
+1. **Install Node.js**: Make sure you have [Node.js](https://nodejs.org/) installed.
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Build**:
+
+   ```bash
+   node-gyp build
+   ```
+
+The output will be in the `build` directory.
+
+## Build Output
+
+After building, you'll find:
+
+- `MAPIStubLibrary.lib` - The static library for linking
+- Debug symbols (if building in Debug configuration)
+
+The library is now ready to be linked into your MAPI applications.
