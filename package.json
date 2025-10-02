@@ -1,4 +1,15 @@
 {
+  "name": "mapistublibrary",
+  "version": "1.0.0",
+  "description": "MAPI Stub Library for 32 and 64 bit applications",
+  "scripts": {
+    "build": "node-gyp rebuild",
+    "build:x64": "node-gyp rebuild --arch=x64",
+    "build:x86": "node-gyp rebuild --arch=ia32",
+    "build:arm64": "node-gyp rebuild --arch=arm64",
+    "clean": "node-gyp clean",
+    "clean:all": "node-gyp clean && rmdir /s /q build 2>nul || true"
+  },
   "devDependencies": {
     "clang-format": "^1.8.0"
   }
