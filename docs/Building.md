@@ -61,6 +61,7 @@ Alternatively, you can build using Node.js and node-gyp (this creates a static l
    npm run build:x64    # 64-bit library
    npm run build:x86    # 32-bit library  
    npm run build:arm64  # ARM64 library
+   npm run build:all    # Build all architectures
    ```
 
    **Clean build artifacts:**
@@ -69,7 +70,11 @@ Alternatively, you can build using Node.js and node-gyp (this creates a static l
    npm run clean
    ```
 
-The output will be `MAPIStubLibrary.lib` in the `build/Release` directory.
+The outputs will be in architecture-specific directories:
+
+- `build/lib/x64/MAPIStubLibrary.lib` - 64-bit library
+- `build/lib/ia32/MAPIStubLibrary.lib` - 32-bit library  
+- `build/lib/arm64/MAPIStubLibrary.lib` - ARM64 library
 
 ## Build Output
 
