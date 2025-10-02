@@ -37,7 +37,7 @@ You now have a file, `MAPIStubLibrary.lib`, which you can link in to your projec
 
 ## Building with Node.js/node-gyp
 
-Alternatively, you can build using Node.js and node-gyp:
+Alternatively, you can build using Node.js and node-gyp (this creates a static library):
 
 1. **Install Node.js**: Make sure you have [Node.js](https://nodejs.org/) installed.
 
@@ -47,19 +47,33 @@ Alternatively, you can build using Node.js and node-gyp:
    npm install
    ```
 
-3. **Build**:
+3. **Clean previous builds** (optional, but recommended if you've built before):
 
    ```bash
-   node-gyp build
+   node-gyp clean
    ```
 
-The output will be in the `build` directory.
+4. **Build**:
+
+   ```bash
+   node-gyp rebuild
+   ```
+
+The output will be `MAPIStubLibrary.lib` in the `build/Release` directory.
 
 ## Build Output
 
-After building, you'll find:
+### Visual Studio Build
+
+After building with Visual Studio, you'll find:
 
 - `MAPIStubLibrary.lib` - The static library for linking
 - Debug symbols (if building in Debug configuration)
 
-The library is now ready to be linked into your MAPI applications.
+### Node.js Build
+
+After building with node-gyp, you'll find:
+
+- `MAPIStubLibrary.lib` - The static library for linking in `build/Release/`
+
+Both build methods produce the same `MAPIStubLibrary.lib` static library that you can link into your C++ projects.

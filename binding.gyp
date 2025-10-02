@@ -1,7 +1,8 @@
 {
   "targets": [
     {
-      "target_name": "binding",
+      "target_name": "MAPIStubLibrary",
+      "type": "static_library",
       'include_dirs': ['include'],
       "sources": [
           "library/mapiStubLibrary.cpp",
