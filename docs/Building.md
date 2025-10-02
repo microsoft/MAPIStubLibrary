@@ -47,16 +47,10 @@ Alternatively, you can build using Node.js and node-gyp (this creates a static l
    npm install
    ```
 
-3. **Clean previous builds** (optional, but recommended if you've built before):
+3. **Build**:
 
    ```bash
-   node-gyp clean
-   ```
-
-4. **Build**:
-
-   ```bash
-   node-gyp rebuild
+   npm run build
    ```
 
 The output will be `MAPIStubLibrary.lib` in the `build/Release` directory.
