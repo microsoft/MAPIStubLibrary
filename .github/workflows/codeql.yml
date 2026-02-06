@@ -15,7 +15,8 @@ permissions:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    runs-on: windows-latest
+    # Use VS 2026 preview runner (GA May 4, 2026, then switch to windows-2025)
+    runs-on: windows-2025-vs2026
     permissions:
       packages: read
       actions: read
@@ -38,6 +39,15 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: 'recursive'
+
+      - name: Install required VS components from .vsconfig
+        shell: pwsh
+        run: |
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+          Write-Host "Installing components from .vsconfig..."
+          & $installer modify --installPath $vsPath --config "${{ github.workspace }}\.vsconfig" --quiet --norestart --wait
+          Write-Host "VS components installation complete"
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
