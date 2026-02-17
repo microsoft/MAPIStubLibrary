@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.0.0
@@ -15,10 +15,6 @@ Global
 		Debug|Win32 = Debug|Win32
 		Debug|ARM64 = Debug|ARM64
 		Debug|ARM64EC = Debug|ARM64EC
-		Prefast|x64 = Prefast|x64
-		Prefast|Win32 = Prefast|Win32
-		Prefast|ARM64 = Prefast|ARM64
-		Prefast|ARM64EC = Prefast|ARM64EC
 		Release_Unicode|x64 = Release_Unicode|x64
 		Release_Unicode|Win32 = Release_Unicode|Win32
 		Release_Unicode|ARM64 = Release_Unicode|ARM64
@@ -45,14 +41,6 @@ Global
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Debug|ARM64.Build.0 = Debug|ARM64
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Debug|ARM64EC.ActiveCfg = Debug|ARM64EC
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Debug|ARM64EC.Build.0 = Debug|ARM64EC
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|x64.ActiveCfg = Prefast|x64
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|x64.Build.0 = Prefast|x64
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|Win32.ActiveCfg = Prefast|Win32
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|Win32.Build.0 = Prefast|Win32
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|ARM64.ActiveCfg = Prefast|ARM64
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|ARM64.Build.0 = Prefast|ARM64
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|ARM64EC.ActiveCfg = Prefast|ARM64EC
-		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Prefast|ARM64EC.Build.0 = Prefast|ARM64EC
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Release_Unicode|x64.ActiveCfg = Release_Unicode|x64
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Release_Unicode|x64.Build.0 = Release_Unicode|x64
 		{ACD4DD9F-0FB8-42C8-BC1C-25A5A29CB40C}.Release_Unicode|Win32.ActiveCfg = Release_Unicode|Win32
