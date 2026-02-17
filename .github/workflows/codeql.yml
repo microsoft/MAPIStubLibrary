@@ -51,6 +51,13 @@ jobs:
           Write-Host "Downloading Windows 11 SDK 10.0.22621.0..."
           $installer = "$env:TEMP\winsdksetup.exe"
           Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/?linkid=2196241" -OutFile $installer
+          Write-Host "Verifying Authenticode signature for downloaded SDK installer..."
+          $signature = Get-AuthenticodeSignature -FilePath $installer
+          if ($null -eq $signature -or $signature.Status -ne 'Valid' -or $null -eq $signature.SignerCertificate -or $signature.SignerCertificate.Subject -notlike '*Microsoft*') {
+            Write-Error ("Downloaded SDK installer failed Authenticode validation. " +
+                        "Status: {0}. Subject: {1}" -f $signature.Status, $signature.SignerCertificate.Subject)
+            exit 1
+          }
           Write-Host "Installing SDK (this may take a few minutes)..."
           $proc = Start-Process -FilePath $installer -ArgumentList "/features OptionId.DesktopCPPx64 OptionId.DesktopCPPx86 /quiet /norestart /log $env:TEMP\sdk_install.log" -Wait -PassThru
           Write-Host "Installer exit code: $($proc.ExitCode)"
