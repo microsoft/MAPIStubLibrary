@@ -29,7 +29,7 @@ jobs:
       run: |
         # Find all C/C++ files, excluding include directory
         files=$(find . -type f \( -name "*.cpp" -o -name "*.h" -o -name "*.c" \) \
-          ! -path "./include/*" ! -path "./.git/*")
+          ! -path "./include/*" ! -path "./.git/*" | sort)
         
         if [ -z "$files" ]; then
           echo "No C/C++ files found"
@@ -37,5 +37,4 @@ jobs:
         fi
         
         # Check formatting (--dry-run -Werror exits non-zero if changes needed)
-        echo "Checking formatting..."
-        echo "$files" | xargs clang-format-17 --dry-run -Werror --style=file --fallback-style=Microsoft
+        echo "$files" | xargs clang-format-17 --verbose --dry-run -Werror --style=file --fallback-style=Microsoft
