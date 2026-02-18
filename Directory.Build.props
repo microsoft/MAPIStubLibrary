@@ -13,12 +13,10 @@
     <SpectreMitigation Condition="'$(Platform)' == 'ARM64EC'">false</SpectreMitigation>
     <ControlFlowGuard>Guard</ControlFlowGuard>
     <GuardEHContMetadata>true</GuardEHContMetadata>
-    
-    <!-- CET (Control-flow Enforcement Technology) - not supported on ARM64EC -->
-    <!-- Note: CETCompat must be set at linker level, handled in ItemDefinitionGroup below -->
   </PropertyGroup>
   
   <!-- Compiler Settings - Quality & Security Baseline -->
+  <!-- CET (Control-flow Enforcement Technology) enabled by default, disabled for ARM64EC below -->
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -26,6 +24,9 @@
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
+    <Link>
+      <CETCompat>true</CETCompat>
+    </Link>
   </ItemDefinitionGroup>
   
   <!-- Disable CET for ARM64EC (not supported) -->
