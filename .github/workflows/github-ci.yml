@@ -21,9 +21,13 @@ jobs:
       fail-fast: false
       matrix:
         configuration: [ 'Release', 'Debug', 'Release_Unicode', 'Debug_Unicode' ]
-        platform: [ 'Win32', 'x64', 'ARM64EC' ]
+        platform: [ 'Win32', 'x64', 'ARM64', 'ARM64EC' ]
         exclude:
-          # ARM64EC only needs Unicode builds
+          # ARM64/ARM64EC only need Unicode builds
+          - platform: ARM64
+            configuration: Release
+          - platform: ARM64
+            configuration: Debug
           - platform: ARM64EC
             configuration: Release
           - platform: ARM64EC

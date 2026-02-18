@@ -3,13 +3,46 @@
   "version": "1.0.0",
   "description": "MAPI Stub Library for 32 and 64 bit applications",
   "scripts": {
-    "build": "node-gyp rebuild",
-    "build:x64": "node-gyp configure --arch=x64 && node-gyp build --arch=x64",
-    "build:x86": "node-gyp configure --arch=ia32 && node-gyp build --arch=ia32",
-    "build:arm64": "node-gyp configure --arch=arm64 && node-gyp build --arch=arm64",
-    "build:all": "npm run build:x64 && npm run build:x86 && npm run build:arm64",
-    "clean": "node-gyp clean",
-    "clean:all": "node-gyp clean && rmdir /s /q build 2>nul || true"
+    "msbuild": "powershell -Command \"$vs = & \\\"${env:ProgramFiles(x86)}\\Microsoft Visual Studio\\Installer\\vswhere.exe\\\" -latest -property installationPath; & \\\"$vs\\MSBuild\\Current\\Bin\\amd64\\msbuild.exe\\\"\"",
+
+    "build": "npm run build:debug:x64",
+    "build:debug": "npm run build:debug:x64",
+    "build:debug:x64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=x64",
+    "build:debug:x86": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=Win32",
+    "build:release": "npm run build:release:x64",
+    "build:release:x64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=x64",
+    "build:release:x86": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=Win32",
+
+    "build:debug:ansi": "npm run build:debug:ansi:x64",
+    "build:debug:ansi:x64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=x64",
+    "build:debug:ansi:x86": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=Win32",
+    "build:release:ansi": "npm run build:release:ansi:x64",
+    "build:release:ansi:x64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=x64",
+    "build:release:ansi:x86": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=Win32",
+
+    "build:all": "npm run build:all:x64 && npm run build:all:x86",
+    "build:all:x64": "npm run build:debug:x64 && npm run build:release:x64 && npm run build:debug:ansi:x64 && npm run build:release:ansi:x64",
+    "build:all:x86": "npm run build:debug:x86 && npm run build:release:x86 && npm run build:debug:ansi:x86 && npm run build:release:ansi:x86",
+
+    "build:debug:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=ARM64",
+    "build:release:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=ARM64",
+    "build:debug:ansi:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=ARM64",
+    "build:release:ansi:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=ARM64",
+    "build:all:arm64": "npm run build:debug:arm64 && npm run build:release:arm64 && npm run build:debug:ansi:arm64 && npm run build:release:ansi:arm64",
+
+    "build:debug:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=ARM64EC",
+    "build:release:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=ARM64EC",
+    "build:debug:ansi:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=ARM64EC",
+    "build:release:ansi:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=ARM64EC",
+    "build:all:arm64ec": "npm run build:debug:arm64ec && npm run build:release:arm64ec && npm run build:debug:ansi:arm64ec && npm run build:release:ansi:arm64ec",
+
+    "clean": "npm run msbuild -- mapistub.sln /t:Clean",
+
+    "gyp:build": "node-gyp rebuild",
+    "gyp:build:x64": "node-gyp configure --arch=x64 && node-gyp build --arch=x64",
+    "gyp:build:x86": "node-gyp configure --arch=ia32 && node-gyp build --arch=ia32",
+    "gyp:build:arm64": "node-gyp configure --arch=arm64 && node-gyp build --arch=arm64",
+    "gyp:clean": "node-gyp clean"
   },
   "devDependencies": {
     "clang-format": "^1.8.0"
