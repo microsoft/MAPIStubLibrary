@@ -4,7 +4,7 @@
 
 /.vs
 /bin
-**/obj/
+/obj
 /packages
 /build
 /node_modules
