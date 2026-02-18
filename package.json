@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "MAPI Stub Library for 32 and 64 bit applications",
   "scripts": {
-    "msbuild": "powershell -Command \"$vs = & \\\"${env:ProgramFiles(x86)}\\Microsoft Visual Studio\\Installer\\vswhere.exe\\\" -latest -property installationPath; & \\\"$vs\\MSBuild\\Current\\Bin\\amd64\\msbuild.exe\\\"\"",
+    "msbuild": "powershell -Command \"$vs = & \\\"${env:ProgramFiles(x86)}\\Microsoft Visual Studio\\Installer\\vswhere.exe\\\" -latest -property installationPath; & \\\"$vs\\MSBuild\\Current\\Bin\\amd64\\msbuild.exe\\\" @args\"",
 
     "build": "npm run build:debug:x64",
     "build:debug": "npm run build:debug:x64",
