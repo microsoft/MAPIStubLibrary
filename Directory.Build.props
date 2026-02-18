@@ -34,4 +34,12 @@
       <CETCompat>false</CETCompat>
     </Link>
   </ItemDefinitionGroup>
+
+  <!-- Windows SDK via NuGet -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.CPP" Version="10.0.22621.756" />
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.x64" Version="10.0.22621.756" Condition="'$(Platform)' == 'x64'" />
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.x86" Version="10.0.22621.756" Condition="'$(Platform)' == 'Win32'" />
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.arm64" Version="10.0.22621.756" Condition="'$(Platform)' == 'ARM64EC'" />
+  </ItemGroup>
 </Project>

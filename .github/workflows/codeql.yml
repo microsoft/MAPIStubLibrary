@@ -40,18 +40,6 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install Windows 11 SDK (10.0.22621.0)
-        shell: pwsh
-        run: |
-          $sdkPath = "${env:ProgramFiles(x86)}\Windows Kits\10\Include\10.0.22621.0"
-          if (Test-Path $sdkPath) {
-            Write-Host "Windows SDK 10.0.22621.0 already installed"
-            exit 0
-          }
-          Write-Host "Downloading Windows 11 SDK 10.0.22621.0..."
-          $installer = "$env:TEMP\winsdksetup.exe"
-          & "${{ github.workspace }}\scripts\install-winsdk.ps1"
-
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@b5ebac6f4c00c8ccddb7cdcd45fdb248329f808a # v3.32.2
