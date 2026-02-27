@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "MAPI Stub Library for 32 and 64 bit applications",
   "scripts": {
-    "msbuild": "powershell -Command \"$vs = & \\\"${env:ProgramFiles(x86)}\\Microsoft Visual Studio\\Installer\\vswhere.exe\\\" -latest -property installationPath; & \\\"$vs\\MSBuild\\Current\\Bin\\amd64\\msbuild.exe\\\" @args\"",
+    "msbuild": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$pf86 = ${env:ProgramFiles(x86)}; $vswhere = Join-Path $pf86 'Microsoft Visual Studio\\Installer\\vswhere.exe'; if (-not (Test-Path $vswhere)) { Write-Error 'vswhere.exe not found. Install Visual Studio Build Tools or Visual Studio.'; exit 1 }; $vsPath = & $vswhere -latest -requires Microsoft.Component.MSBuild -property installationPath; if (-not $vsPath) { Write-Error 'MSBuild not found via vswhere.'; exit 1 }; $msbuild = Join-Path $vsPath 'MSBuild\\Current\\Bin\\amd64\\MSBuild.exe'; if (-not (Test-Path $msbuild)) { Write-Error ('MSBuild.exe not found at ' + $msbuild); exit 1 }; & $msbuild @args\"",
 
     "build": "npm run build:debug:x64",
     "build:debug": "npm run build:debug:x64",
@@ -26,15 +26,11 @@
 
     "build:debug:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=ARM64",
     "build:release:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=ARM64",
-    "build:debug:ansi:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=ARM64",
-    "build:release:ansi:arm64": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=ARM64",
-    "build:all:arm64": "npm run build:debug:arm64 && npm run build:release:arm64 && npm run build:debug:ansi:arm64 && npm run build:release:ansi:arm64",
+    "build:all:arm64": "npm run build:debug:arm64 && npm run build:release:arm64",
 
     "build:debug:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug_Unicode /p:Platform=ARM64EC",
     "build:release:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release_Unicode /p:Platform=ARM64EC",
-    "build:debug:ansi:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Debug /p:Platform=ARM64EC",
-    "build:release:ansi:arm64ec": "npm run msbuild -- mapistub.sln /m /p:Configuration=Release /p:Platform=ARM64EC",
-    "build:all:arm64ec": "npm run build:debug:arm64ec && npm run build:release:arm64ec && npm run build:debug:ansi:arm64ec && npm run build:release:ansi:arm64ec",
+    "build:all:arm64ec": "npm run build:debug:arm64ec && npm run build:release:arm64ec",
 
     "clean": "npm run msbuild -- mapistub.sln /t:Clean",
 
