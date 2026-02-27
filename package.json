@@ -33,6 +33,8 @@
     "build:all:arm64ec": "npm run build:debug:arm64ec && npm run build:release:arm64ec",
 
     "clean": "npm run msbuild -- mapistub.sln /t:Clean",
+    "clean:gyp": "npm run gyp:clean",
+    "clean:all": "npm run clean && npm run clean:gyp",
 
     "gyp:build": "node-gyp rebuild",
     "gyp:build:x64": "node-gyp configure --arch=x64 && node-gyp build --arch=x64",
