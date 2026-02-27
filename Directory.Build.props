@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <!-- VS 2026 Toolset -->
+    <PlatformToolset>v145</PlatformToolset>
+    
+    <!-- Windows 11 SDK (pinned for reproducible builds) -->
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    
+    <!-- Security Features (PropertyGroup level) -->
+    <!-- Note: Spectre mitigated libs may not be available for ARM64/ARM64EC -->
+    <SpectreMitigation Condition="'$(Platform)' != 'ARM64' AND '$(Platform)' != 'ARM64EC'">Spectre</SpectreMitigation>
+    <SpectreMitigation Condition="'$(Platform)' == 'ARM64' OR '$(Platform)' == 'ARM64EC'">false</SpectreMitigation>
+    <ControlFlowGuard>Guard</ControlFlowGuard>
+    <GuardEHContMetadata>true</GuardEHContMetadata>
+  </PropertyGroup>
+  
+  <!-- Compiler Settings - Quality & Security Baseline -->
+  <!-- CET (Control-flow Enforcement Technology) enabled by default, disabled for ARM64/ARM64EC below -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <CETCompat>true</CETCompat>
+    </Link>
+  </ItemDefinitionGroup>
+  
+  <!-- Disable CET for ARM64/ARM64EC (not supported) -->
+  <ItemDefinitionGroup Condition="'$(Platform)' == 'ARM64' OR '$(Platform)' == 'ARM64EC'">
+    <Link>
+      <CETCompat>false</CETCompat>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
