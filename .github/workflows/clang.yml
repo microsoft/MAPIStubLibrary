@@ -24,17 +24,17 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y clang-format-17
-    
+
     - name: Run clang-format style check
       run: |
         # Find all C/C++ files, excluding include directory
         files=$(find . -type f \( -name "*.cpp" -o -name "*.h" -o -name "*.c" \) \
           ! -path "./include/*" ! -path "./.git/*" | sort)
-        
+
         if [ -z "$files" ]; then
           echo "No C/C++ files found"
           exit 0
         fi
-        
+
         # Check formatting (--dry-run -Werror exits non-zero if changes needed)
         echo "$files" | xargs clang-format-17 --verbose --dry-run -Werror --style=file --fallback-style=Microsoft
