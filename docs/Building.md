@@ -35,9 +35,9 @@ The project includes all necessary MAPI headers in the `include` directory, so n
 
 You now have a file, `MAPIStubLibrary.lib`, which you can link in to your project.
 
-## Building with Node.js/node-gyp
+## Building with Node.js scripts
 
-Alternatively, you can build using Node.js and node-gyp (this creates a static library):
+The npm scripts now use MSBuild by default (and keep node-gyp scripts under `gyp:*`):
 
 1. **Install Node.js**: Make sure you have [Node.js](https://nodejs.org/) installed.
 
@@ -47,30 +47,45 @@ Alternatively, you can build using Node.js and node-gyp (this creates a static l
    npm install
    ```
 
-3. **Build**:
+3. **Build with MSBuild**:
 
-   **Default build (matches your Node.js architecture):**
+   **Default build:**
 
    ```bash
    npm run build
    ```
 
-   **Architecture-specific builds:**
+   **Common build variants:**
 
    ```bash
-   npm run build:x64    # 64-bit library
-   npm run build:x86    # 32-bit library  
-   npm run build:arm64  # ARM64 library
-   npm run build:all    # Build all architectures
+   npm run build:debug:x64      # default script target
+   npm run build:release:x64
+   npm run build:debug:x86
+   npm run build:release:x86
+   npm run build:debug:arm64
+   npm run build:release:arm64
+   npm run build:debug:arm64ec
+   npm run build:release:arm64ec
+   npm run build:all            # x64 + x86 all variants
    ```
 
-   **Clean build artifacts:**
+   **Clean build outputs:**
 
    ```bash
    npm run clean
    ```
 
-The outputs will be in architecture-specific directories:
+4. **(Optional) Build with node-gyp (legacy):**
+
+   ```bash
+   npm run gyp:build
+   npm run gyp:build:x64
+   npm run gyp:build:x86
+   npm run gyp:build:arm64
+   npm run gyp:clean
+   ```
+
+MSBuild outputs go to Visual Studio configuration/platform output directories. node-gyp outputs are in architecture-specific directories:
 
 - `build/lib/x64/MAPIStubLibrary.lib` - 64-bit library
 - `build/lib/ia32/MAPIStubLibrary.lib` - 32-bit library  
@@ -85,9 +100,9 @@ After building with Visual Studio, you'll find:
 - `MAPIStubLibrary.lib` - The static library for linking
 - Debug symbols (if building in Debug configuration)
 
-### Node.js Build
+### Node.js (node-gyp) Build
 
-After building with node-gyp, you'll find:
+After building with node-gyp (`gyp:*` scripts), you'll find:
 
 - `MAPIStubLibrary.lib` - The static library for linking in `build/Release/`
 
