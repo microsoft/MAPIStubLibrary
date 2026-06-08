@@ -102,8 +102,8 @@ MAPIUNINITIALIZE	MAPIUninitialize;
 
 typedef HRESULT (STDMETHODCALLTYPE MAPILOGONEX)(
 	ULONG_PTR ulUIParam,
-	/*OFFICEDEV add _opt*/ __in_opt LPTSTR lpszProfileName,
-	/*OFFICEDEV add _opt*/ __in_opt LPTSTR lpszPassword,
+	/*OFFICEDEV add _opt*/ _In_opt_ LPTSTR lpszProfileName,
+	/*OFFICEDEV add _opt*/ _In_opt_ LPTSTR lpszPassword,
 	ULONG ulFlags,   /*  ulFlags takes all that SimpleMAPI does + MAPI_UNICODE */
 	LPMAPISESSION FAR * lppSession
 );
