@@ -228,6 +228,13 @@ DECLARE_MAPI_INTERFACE_(IMsgServiceAdmin2, IUnknown)
 };
 
 
+STDAPI HrGetAutoDiscoverXML(
+	LPCWSTR wzEmailAddress,
+	LPCWSTR wzPassword,
+	HANDLE hCancelEvent,
+	ULONG ulFlags,
+	IStream** ppResponse);
+
 #ifdef	__cplusplus
 }		/*	extern "C" */
 #endif	
